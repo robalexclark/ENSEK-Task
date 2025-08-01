@@ -9,6 +9,7 @@ namespace MeterReadingsApi.Repositories
         bool AccountExists(int accountId);
         bool ReadingExists(int accountId, DateTime dateTime);
         bool HasNewerReading(int accountId, DateTime dateTime);
+        Task<IEnumerable<MeterReading>> GetReadingsByAccountAsync(int accountId);
         void EnsureSeedData();
     }
 }

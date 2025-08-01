@@ -32,6 +32,15 @@ namespace MeterReadingsApi.Repositories
             return context.MeterReadings.Any(r => r.AccountId == accountId && r.MeterReadingDateTime > dateTime);
         }
 
+        public async Task<IEnumerable<MeterReading>> GetReadingsByAccountAsync(int accountId)
+        {
+            return await context.MeterReadings
+                .AsNoTracking()
+                .Where(r => r.AccountId == accountId)
+                .OrderBy(r => r.MeterReadingDateTime)
+                .ToListAsync();
+        }
+
         public async Task AddMeterReadingsAsync(IEnumerable<MeterReading> readings)
         {
             await context.MeterReadings.AddRangeAsync(readings);

@@ -22,6 +22,8 @@ public class MeterReadingCsvRecordValidatorTests
         public bool AccountExists(int accountId) => AccountExistsReturn;
         public bool ReadingExists(int accountId, DateTime dateTime) => ReadingExistsReturn;
         public bool HasNewerReading(int accountId, DateTime dateTime) => HasNewerReadingReturn;
+        public Task<IEnumerable<MeterReading>> GetReadingsByAccountAsync(int accountId) =>
+            Task.FromResult<IEnumerable<MeterReading>>(Array.Empty<MeterReading>());
         public void EnsureSeedData() {}
     }
 

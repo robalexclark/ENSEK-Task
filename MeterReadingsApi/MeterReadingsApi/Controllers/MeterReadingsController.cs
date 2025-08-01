@@ -4,28 +4,29 @@
     using MeterReadingsApi.Repositories;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Configuration;
 
     [Route("api/meter-readings")]
     [ApiController]                       // automatic 400s on model-binding errors
     public class MeterReadingsController : ControllerBase
     {
         private readonly IMeterReadingUploadService uploadService;
-        private readonly IConfiguration configuration;
         private readonly IMeterReadingsRepository repository;
 
-        public MeterReadingsController(IMeterReadingUploadService uploadService, IConfiguration configuration, IMeterReadingsRepository repository)
+        public MeterReadingsController(IMeterReadingUploadService uploadService, IMeterReadingsRepository repository)
         {
             this.uploadService = uploadService;
-            this.configuration = configuration;
             this.repository = repository;
         }
 
-        [Route("~/accounts/{id}/meter-readings")]
+        [Route("~/accounts/{accountId}/meter-readings")]
         [HttpGet]
-        public ActionResult GetByAccountId(int accountId)
+        public async Task<ActionResult> GetByAccountId(int accountId)
         {
-            return Ok();
+            if (!repository.AccountExists(accountId))
+                return NotFound();
+
+            var readings = await repository.GetReadingsByAccountAsync(accountId);
+            return Ok(readings);
         }
 
         [Route("meter-reading-uploads")]
