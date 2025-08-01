@@ -1,6 +1,6 @@
 ﻿using Scalar.AspNetCore;
 
-namespace ENSEKTask
+namespace MeterReadingsApi
 {
     public class Program
     {

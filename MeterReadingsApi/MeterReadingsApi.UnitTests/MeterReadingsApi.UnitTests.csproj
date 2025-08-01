@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ENSEKTask\ENSEKTask.csproj" />
+    <ProjectReference Include="..\MeterReadingsApi\MeterReadingsApi.csproj" />
   </ItemGroup>
 
 </Project>

@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36327.8
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ENSEKTask", "ENSEKTask\ENSEKTask.csproj", "{19737589-0D16-4176-90EE-BA6236351310}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeterReadingsApi", "MeterReadingsApi\MeterReadingsApi.csproj", "{19737589-0D16-4176-90EE-BA6236351310}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ENSEKTask.UnitTests", "ENSEKTask.UnitTests\ENSEKTask.UnitTests.csproj", "{98103DF4-EF53-4C7F-90B8-F9FB90C5662D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeterReadingsApi.UnitTests", "MeterReadingsApi.UnitTests\MeterReadingsApi.UnitTests.csproj", "{98103DF4-EF53-4C7F-90B8-F9FB90C5662D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeterReadingsApi.DataModel", "MeterReadingsApi.DataModel\MeterReadingsApi.DataModel.csproj", "{6E5E17A2-DC70-4785-AAFD-C943C20B329C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,18 @@ Global
 		{98103DF4-EF53-4C7F-90B8-F9FB90C5662D}.Release|x64.Build.0 = Release|Any CPU
 		{98103DF4-EF53-4C7F-90B8-F9FB90C5662D}.Release|x86.ActiveCfg = Release|Any CPU
 		{98103DF4-EF53-4C7F-90B8-F9FB90C5662D}.Release|x86.Build.0 = Release|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Debug|x64.Build.0 = Debug|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Debug|x86.Build.0 = Debug|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Release|x64.ActiveCfg = Release|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Release|x64.Build.0 = Release|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Release|x86.ActiveCfg = Release|Any CPU
+		{6E5E17A2-DC70-4785-AAFD-C943C20B329C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
