@@ -1,9 +1,8 @@
+﻿using FluentValidation;
 using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Repositories;
-using FluentValidation;
-using Microsoft.AspNetCore.Http;
 
 namespace MeterReadingsApi.Services
 {
@@ -13,9 +12,7 @@ namespace MeterReadingsApi.Services
         private readonly IMeterReadingsRepository repository;
         private readonly IValidator<MeterReadingCsvRecord> validator;
 
-        public MeterReadingUploadService(ICSVService csvService,
-            IMeterReadingsRepository repository,
-            IValidator<MeterReadingCsvRecord> validator)
+        public MeterReadingUploadService(ICSVService csvService, IMeterReadingsRepository repository, IValidator<MeterReadingCsvRecord> validator)
         {
             this.csvService = csvService;
             this.repository = repository;

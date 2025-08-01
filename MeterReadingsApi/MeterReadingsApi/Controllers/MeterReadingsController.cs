@@ -1,12 +1,12 @@
 ﻿namespace MeterReadingsApi.Controllers
 {
-    using MeterReadingsApi.Interfaces;
     using MeterReadingsApi.DataModel;
+    using MeterReadingsApi.Interfaces;
     using MeterReadingsApi.Repositories;
-    using System.Collections.Generic;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
+    using System.Collections.Generic;
 
     [Route("api/meter-readings")]
     [ApiController]
@@ -68,7 +68,7 @@
                     return StatusCode(StatusCodes.Status207MultiStatus, new { successful = success, failed });
                 }
 
-                return StatusCode(StatusCodes.Status201Created, new { successful = success, failed });
+                return StatusCode(StatusCodes.Status201Created);
             }
             catch
             {

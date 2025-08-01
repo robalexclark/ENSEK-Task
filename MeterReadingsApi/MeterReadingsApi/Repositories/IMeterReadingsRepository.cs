@@ -1,4 +1,4 @@
-using MeterReadingsApi.DataModel;
+﻿using MeterReadingsApi.DataModel;
 
 namespace MeterReadingsApi.Repositories
 {

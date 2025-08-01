@@ -14,10 +14,12 @@ namespace MeterReadingsApi.Services
             using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
             csv.Context.RegisterClassMap<MeterReadingCsvMap>();
             var records = new List<MeterReadingCsvRecord>();
+
             await foreach (var record in csv.GetRecordsAsync<MeterReadingCsvRecord>())
             {
                 records.Add(record);
             }
+
             return records;
         }
     }
