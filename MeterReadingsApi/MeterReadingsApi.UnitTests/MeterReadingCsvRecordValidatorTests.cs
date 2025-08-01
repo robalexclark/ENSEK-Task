@@ -15,11 +15,13 @@ public class MeterReadingCsvRecordValidatorTests
     {
         public bool AccountExistsReturn { get; set; } = true;
         public bool ReadingExistsReturn { get; set; } = false;
+        public bool HasNewerReadingReturn { get; set; } = false;
 
         public IEnumerable<Account> GetAccounts() => Array.Empty<Account>();
         public Task AddMeterReadingsAsync(IEnumerable<MeterReading> readings) => Task.CompletedTask;
         public bool AccountExists(int accountId) => AccountExistsReturn;
         public bool ReadingExists(int accountId, DateTime dateTime) => ReadingExistsReturn;
+        public bool HasNewerReading(int accountId, DateTime dateTime) => HasNewerReadingReturn;
         public void EnsureSeedData() {}
     }
 
@@ -59,6 +61,22 @@ public class MeterReadingCsvRecordValidatorTests
     public void Duplicate_reading_fails_validation()
     {
         var repo = new FakeRepository { ReadingExistsReturn = true };
+        var validator = new MeterReadingCsvRecordValidator(repo);
+        var record = new MeterReadingCsvRecord
+        {
+            AccountId = 1,
+            MeterReadingDateTime = DateTime.UtcNow,
+            MeterReadValue = "12345"
+        };
+
+        var result = validator.Validate(record);
+        Assert.False(result.IsValid);
+    }
+
+    [Fact]
+    public void Older_reading_fails_validation()
+    {
+        var repo = new FakeRepository { HasNewerReadingReturn = true };
         var validator = new MeterReadingCsvRecordValidator(repo);
         var record = new MeterReadingCsvRecord
         {
