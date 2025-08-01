@@ -1,6 +1,6 @@
-using CsvHelper.Configuration;
+﻿using CsvHelper.Configuration;
 
-namespace MeterReadingsApi.Models
+namespace MeterReadingsApi.CsvMappers
 {
     public sealed class MeterReadingCsvMap : ClassMap<MeterReadingCsvRecord>
     {

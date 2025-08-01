@@ -1,6 +1,6 @@
-using CsvHelper;
+﻿using CsvHelper;
+using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.Interfaces;
-using MeterReadingsApi.Models;
 using System.Globalization;
 using System.Text;
 

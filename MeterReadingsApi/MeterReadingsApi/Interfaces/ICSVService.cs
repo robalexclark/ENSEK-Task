@@ -1,4 +1,4 @@
-using MeterReadingsApi.Models;
+﻿using MeterReadingsApi.CsvMappers;
 
 namespace MeterReadingsApi.Interfaces
 {

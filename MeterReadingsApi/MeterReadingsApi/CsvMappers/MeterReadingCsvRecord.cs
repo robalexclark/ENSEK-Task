@@ -1,4 +1,4 @@
-namespace MeterReadingsApi.Models
+﻿namespace MeterReadingsApi.CsvMappers
 {
     public class MeterReadingCsvRecord
     {

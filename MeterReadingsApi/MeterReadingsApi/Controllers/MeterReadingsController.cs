@@ -3,11 +3,11 @@
     using MeterReadingsApi.Interfaces;
     using MeterReadingsApi.DataModel;
     using MeterReadingsApi.Repositories;
-    using MeterReadingsApi.Models;
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
+    using MeterReadingsApi.CsvMappers;
 
     [Route("api/meter-readings")]
     [ApiController]
