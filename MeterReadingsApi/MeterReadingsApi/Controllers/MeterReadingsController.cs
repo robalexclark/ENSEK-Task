@@ -3,7 +3,6 @@
     using MeterReadingsApi.DataModel;
     using MeterReadingsApi.Interfaces;
     using MeterReadingsApi.Repositories;
-    using MeterReadingsApi.Models;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
@@ -22,21 +21,6 @@
             this.uploadService = uploadService;
             this.configuration = configuration;
             this.repository = repository;
-        }
-
-        [Route("")]
-        [HttpGet]
-        public ActionResult Get()
-        {
-            return Ok();
-        }
-
-        [Route("~/accounts")]
-        [HttpGet]
-        public ActionResult<IEnumerable<Account>> GetAccounts()
-        {
-            var accounts = repository.GetAccounts();
-            return Ok(accounts);
         }
 
         [Route("~/accounts/{id}/meter-readings")]

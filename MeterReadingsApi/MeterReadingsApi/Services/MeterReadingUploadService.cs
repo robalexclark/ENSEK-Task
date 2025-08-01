@@ -45,6 +45,7 @@ namespace MeterReadingsApi.Services
                     MeterReadingDateTime = record.MeterReadingDateTime,
                     MeterReadValue = value
                 });
+
                 success++;
             }
 
