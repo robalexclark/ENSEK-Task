@@ -2,7 +2,7 @@
 {
     using MeterReadingsApi.Interfaces;
     using MeterReadingsApi.DataModel;
-    using Microsoft.EntityFrameworkCore;
+    using MeterReadingsApi.Repositories;
     using System.Collections.Generic;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
@@ -13,13 +13,13 @@
     {
         private readonly ICSVService csvService;
         private readonly IConfiguration configuration;
-        private readonly MeterReadingsContext dbContext;
+        private readonly IMeterReadingsRepository repository;
 
-        public MeterReadingsController(ICSVService csvService, IConfiguration configuration, MeterReadingsContext dbContext)
+        public MeterReadingsController(ICSVService csvService, IConfiguration configuration, IMeterReadingsRepository repository)
         {
             this.csvService = csvService;
             this.configuration = configuration;
-            this.dbContext = dbContext;
+            this.repository = repository;
         }
 
         [Route("")]
@@ -33,7 +33,7 @@
         [HttpGet]
         public ActionResult<IEnumerable<Account>> GetAccounts()
         {
-            var accounts = dbContext.Accounts.AsNoTracking().ToList();
+            var accounts = repository.GetAccounts();
             return Ok(accounts);
         }
 
