@@ -1,24 +1,24 @@
-﻿using System.Text;
+using CsvHelper;
+using MeterReadingsApi.Interfaces;
+using MeterReadingsApi.Models;
+using System.Globalization;
+using System.Text;
 
 namespace MeterReadingsApi.Services
 {
-    using CsvHelper;
-    using MeterReadingsApi.Interfaces;
-    using System.Globalization;
-    using System.IO;
-    using System.Linq;
-
-    public class CsvService: ICSVService
+    public class CsvService : ICSVService
     {
-        public IEnumerable<string> ReadCsvFileForMeterReadings(string location)
+        public async Task<IEnumerable<MeterReadingCsvRecord>> ReadMeterReadingsAsync(Stream stream)
         {
-                //using var reader = new StreamReader(location, Encoding.Default);
-                //using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-                //csv.Context.RegisterClassMap<MeterReadingsMap>();
-                //var records = csv.GetRecords<MeterReadingModel>();
-                //return records.ToList();
-
-            return new List<string>();
+            using var reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: true);
+            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            csv.Context.RegisterClassMap<MeterReadingCsvMap>();
+            var records = new List<MeterReadingCsvRecord>();
+            await foreach (var record in csv.GetRecordsAsync<MeterReadingCsvRecord>())
+            {
+                records.Add(record);
+            }
+            return records;
         }
     }
 }
