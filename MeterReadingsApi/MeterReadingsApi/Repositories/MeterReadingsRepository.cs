@@ -1,7 +1,5 @@
-using MeterReadingsApi.DataModel;
+﻿using MeterReadingsApi.DataModel;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace MeterReadingsApi.Repositories
 {
@@ -22,6 +20,7 @@ namespace MeterReadingsApi.Repositories
         public void EnsureSeedData()
         {
             context.Database.EnsureCreated();
+
             if (!context.Accounts.Any())
             {
                 context.Accounts.AddRange(new[]
@@ -54,6 +53,7 @@ namespace MeterReadingsApi.Repositories
                     new Account { AccountId = 1247, FirstName = "Jim", LastName = "Test" },
                     new Account { AccountId = 1248, FirstName = "Pam", LastName = "Test" }
                 });
+
                 context.SaveChanges();
             }
         }

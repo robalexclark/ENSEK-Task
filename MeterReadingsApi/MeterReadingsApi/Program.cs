@@ -1,7 +1,9 @@
-﻿using Scalar.AspNetCore;
-using MeterReadingsApi.DataModel;
+﻿using MeterReadingsApi.DataModel;
+using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Repositories;
+using MeterReadingsApi.Services;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 namespace MeterReadingsApi
 {
@@ -19,6 +21,7 @@ namespace MeterReadingsApi
             builder.Services.AddDbContext<MeterReadingsContext>(options => options.UseSqlite(connectionString));
             builder.Services.AddScoped<IMeterReadingsRepository, MeterReadingsRepository>();
 
+            builder.Services.AddSingleton<ICSVService, CsvService>();
 
             var app = builder.Build();
 
