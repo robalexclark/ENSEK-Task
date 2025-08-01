@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Xunit;
 
-namespace MeterReadingsApi.UnitTests;
-
+namespace MeterReadingsApi.UnitTests
+{
 public class MeterReadingsControllerTests
 {
     //[Fact]
@@ -28,4 +28,4 @@ public class MeterReadingsControllerTests
 
     //    Assert.All(result, forecast => Assert.False(string.IsNullOrWhiteSpace(forecast.Summary)));
     //}
-}
+}}
