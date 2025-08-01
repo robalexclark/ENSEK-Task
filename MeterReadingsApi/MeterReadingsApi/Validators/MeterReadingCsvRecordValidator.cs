@@ -14,8 +14,8 @@ namespace MeterReadingsApi.Validators
 
             RuleFor(r => r.MeterReadValue)
                 .NotEmpty()
-                .Must(v => int.TryParse(v, out var value) && value >= 0 && value <= 99999)
-                .WithMessage("MeterReadValue must be an integer between 0 and 99999");
+                .Matches("^\\d{5}$")
+                .WithMessage("MeterReadValue must be a 5-digit integer");
 
             RuleFor(r => r)
                 .Must(r => !repository.ReadingExists(r.AccountId, r.MeterReadingDateTime))
