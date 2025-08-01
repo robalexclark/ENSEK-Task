@@ -2,6 +2,9 @@
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Repositories;
 using MeterReadingsApi.Services;
+using MeterReadingsApi.Validators;
+using MeterReadingsApi.CsvMappers;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -22,6 +25,8 @@ namespace MeterReadingsApi
             builder.Services.AddScoped<IMeterReadingsRepository, MeterReadingsRepository>();
 
             builder.Services.AddSingleton<ICSVService, CsvService>();
+            builder.Services.AddScoped<IMeterReadingUploadService, MeterReadingUploadService>();
+            builder.Services.AddTransient<IValidator<MeterReadingCsvRecord>, MeterReadingCsvRecordValidator>();
 
             var app = builder.Build();
 
