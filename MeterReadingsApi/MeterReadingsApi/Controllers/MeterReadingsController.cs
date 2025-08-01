@@ -3,6 +3,7 @@
     using MeterReadingsApi.DataModel;
     using MeterReadingsApi.Interfaces;
     using MeterReadingsApi.Repositories;
+    using MeterReadingsApi.Models;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
@@ -47,7 +48,7 @@
 
         [Route("meter-reading-uploads")]
         [HttpPost]
-        public async Task<ActionResult> MeterReadingUploads(IFormFile? file)
+        public async Task<ActionResult> MeterReadingUploads([FromForm] IFormFile? file)
         {
             if (file == null || file.Length == 0)
             {
@@ -56,16 +57,16 @@
 
             try
             {
-                var (success, failed) = await uploadService.UploadAsync(file);
+                var result = await uploadService.UploadAsync(file);
 
-                if (success == 0)
+                if (result.Successful == 0)
                 {
-                    return UnprocessableEntity(new { successful = success, failed });
+                    return UnprocessableEntity(new { successful = result.Successful, failed = result.Failed });
                 }
 
-                if (failed > 0)
+                if (result.Failed > 0)
                 {
-                    return StatusCode(StatusCodes.Status207MultiStatus, new { successful = success, failed });
+                    return StatusCode(StatusCodes.Status207MultiStatus, new { successful = result.Successful, failed = result.Failed });
                 }
 
                 return StatusCode(StatusCodes.Status201Created);

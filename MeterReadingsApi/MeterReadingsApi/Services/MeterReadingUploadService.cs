@@ -19,7 +19,7 @@ namespace MeterReadingsApi.Services
             this.validator = validator;
         }
 
-        public async Task<(int Successful, int Failed)> UploadAsync(IFormFile file)
+        public async Task<Models.MeterReadingUploadResult> UploadAsync(IFormFile file)
         {
             using var stream = file.OpenReadStream();
             var records = await csvService.ReadMeterReadingsAsync(stream);
@@ -53,7 +53,7 @@ namespace MeterReadingsApi.Services
                 await repository.AddMeterReadingsAsync(validReadings);
             }
 
-            return (success, failed);
+            return new Models.MeterReadingUploadResult(success, failed);
         }
     }
 }
