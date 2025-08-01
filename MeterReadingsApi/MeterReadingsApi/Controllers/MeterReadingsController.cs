@@ -1,15 +1,13 @@
 ﻿namespace MeterReadingsApi.Controllers
 {
-    using MeterReadingsApi.DataModel;
     using MeterReadingsApi.Interfaces;
     using MeterReadingsApi.Repositories;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
-    using System.Collections.Generic;
 
     [Route("api/meter-readings")]
-    [ApiController]
+    [ApiController]                       // automatic 400s on model-binding errors
     public class MeterReadingsController : ControllerBase
     {
         private readonly IMeterReadingUploadService uploadService;
@@ -34,31 +32,17 @@
         [HttpPost]
         public async Task<ActionResult> MeterReadingUploads([FromForm] IFormFile? file)
         {
-            if (file == null || file.Length == 0)
+            if (file.Length == 0)
+                return BadRequest("File is empty.");
+
+            var result = await uploadService.UploadAsync(file);
+
+            return result switch
             {
-                return BadRequest();
-            }
-
-            try
-            {
-                var result = await uploadService.UploadAsync(file);
-
-                if (result.Successful == 0)
-                {
-                    return UnprocessableEntity(new { successful = result.Successful, failed = result.Failed });
-                }
-
-                if (result.Failed > 0)
-                {
-                    return StatusCode(StatusCodes.Status207MultiStatus, new { successful = result.Successful, failed = result.Failed });
-                }
-
-                return StatusCode(StatusCodes.Status201Created);
-            }
-            catch
-            {
-                return BadRequest();
-            }
+                { Successful: > 0, Failed: 0 } => Created(string.Empty, result),   // 201
+                { Successful: > 0, Failed: > 0 } => StatusCode(StatusCodes.Status207MultiStatus, result),
+                _ => UnprocessableEntity(result)      // 422
+            };
         }
     }
 }
