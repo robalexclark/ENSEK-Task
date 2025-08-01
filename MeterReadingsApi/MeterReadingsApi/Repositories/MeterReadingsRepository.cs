@@ -17,6 +17,22 @@ namespace MeterReadingsApi.Repositories
             return context.Accounts.AsNoTracking().ToList();
         }
 
+        public bool AccountExists(int accountId)
+        {
+            return context.Accounts.Any(a => a.AccountId == accountId);
+        }
+
+        public bool ReadingExists(int accountId, DateTime dateTime)
+        {
+            return context.MeterReadings.Any(r => r.AccountId == accountId && r.MeterReadingDateTime == dateTime);
+        }
+
+        public async Task AddMeterReadingsAsync(IEnumerable<MeterReading> readings)
+        {
+            await context.MeterReadings.AddRangeAsync(readings);
+            await context.SaveChangesAsync();
+        }
+
         public void EnsureSeedData()
         {
             context.Database.EnsureCreated();

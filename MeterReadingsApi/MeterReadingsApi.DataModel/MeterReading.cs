@@ -7,6 +7,6 @@
         public DateTime MeterReadingDateTime { get; set; }
         public int MeterReadValue { get; set; }
 
-        public Account Account { get; set; }
+        public Account Account { get; set; } = default!;
     }
 }
