@@ -7,8 +7,8 @@ using MeterReadingsApi.Repositories;
 using MeterReadingsApi.Validators;
 using Xunit;
 
-namespace MeterReadingsApi.UnitTests;
-
+namespace MeterReadingsApi.UnitTests
+{
 public class MeterReadingCsvRecordValidatorTests
 {
     private class FakeRepository : IMeterReadingsRepository
@@ -104,4 +104,5 @@ public class MeterReadingCsvRecordValidatorTests
         var result = validator.Validate(record);
         Assert.False(result.IsValid);
     }
+}
 }
