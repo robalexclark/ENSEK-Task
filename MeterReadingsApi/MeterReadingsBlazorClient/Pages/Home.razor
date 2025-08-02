@@ -8,14 +8,14 @@
         <DataGrid TItem="AccountDto"
                   Data="@accounts"
                   SelectionMode="DataGridSelectionMode.Single"
-                  SelectedRowChanged="OnAccountSelected" Striped Bordered>
+                  SelectedRowChanged="OnAccountSelected" Striped Bordered Virtualize VirtualizeOptions="@(new VirtualizeOptions() { DataGridHeight = "1200px", DataGridMaxHeight = "1200px" })">
             <DataGridColumn TItem="AccountDto" Field="@nameof(AccountDto.AccountId)" Caption="Account ID" />
             <DataGridColumn TItem="AccountDto" Field="@nameof(AccountDto.FirstName)" Caption="First Name" />
             <DataGridColumn TItem="AccountDto" Field="@nameof(AccountDto.LastName)" Caption="Last Name" />
         </DataGrid>
     </Column>
     <Column ColumnSize="ColumnSize.Is6">
-        <DataGrid TItem="MeterReadingDto" Data="@meterReadings" Striped Bordered>
+        <DataGrid TItem="MeterReadingDto" Data="@meterReadings" Striped Bordered Virtualize VirtualizeOptions="@(new VirtualizeOptions() { DataGridHeight = "1200px", DataGridMaxHeight = "1200px" })">
             <DataGridColumn TItem="MeterReadingDto" Field="@nameof(MeterReadingDto.MeterReadingDateTime)" Caption="Reading Date/Time">
                 <DisplayTemplate>
                     @{
