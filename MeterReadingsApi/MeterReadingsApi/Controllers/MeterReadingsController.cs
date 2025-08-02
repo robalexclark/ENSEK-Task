@@ -1,6 +1,10 @@
-﻿using MeterReadingsApi.Interfaces;
+using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Models;
+using MeterReadingsApi.Repositories;
+using MeterReadingsApi.DataModel;
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace MeterReadingsApi.Controllers
 {
@@ -9,17 +13,34 @@ namespace MeterReadingsApi.Controllers
     public class MeterReadingsController : ControllerBase
     {
         private readonly IMeterReadingUploadService uploadService;
+        private readonly IMeterReadingsRepository repository;
+        private readonly IValidator<int> accountIdValidator;
 
-        public MeterReadingsController(IMeterReadingUploadService uploadService)
+        public MeterReadingsController(IMeterReadingUploadService uploadService, IMeterReadingsRepository repository, IValidator<int> accountIdValidator)
         {
             this.uploadService = uploadService;
+            this.repository = repository;
+            this.accountIdValidator = accountIdValidator;
         }
 
-        [Route("~/accounts/{id}/meter-readings")]
+        [Route("~/accounts/{accountId}/meter-readings")]
         [HttpGet]
         public ActionResult GetByAccountId(int accountId)
         {
-            return Ok();
+            ValidationResult validation = accountIdValidator.Validate(accountId);
+            if (!validation.IsValid)
+            {
+                return NotFound();
+            }
+
+            IEnumerable<MeterReading> readings = repository.GetMeterReadingsByAccountId(accountId);
+
+            if (!readings.Any())
+            {
+                return NoContent();
+            }
+
+            return Ok(readings);
         }
 
         [Route("meter-reading-uploads")]

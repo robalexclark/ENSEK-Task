@@ -17,6 +17,14 @@ namespace MeterReadingsApi.Repositories
             return context.Accounts.AsNoTracking().ToList();
         }
 
+        public IEnumerable<MeterReading> GetMeterReadingsByAccountId(int accountId)
+        {
+            return context.MeterReadings
+                .Where(r => r.AccountId == accountId)
+                .AsNoTracking()
+                .ToList();
+        }
+
         public bool AccountExists(int accountId)
         {
             return context.Accounts.Any(a => a.AccountId == accountId);

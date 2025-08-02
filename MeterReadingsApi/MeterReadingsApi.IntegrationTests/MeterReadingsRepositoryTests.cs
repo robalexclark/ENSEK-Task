@@ -36,6 +36,7 @@ namespace MeterReadingsApi.UnitTests
 
             // Assert
             Assert.True(repo.ReadingExists(reading.AccountId, reading.MeterReadingDateTime));
+            Assert.Single(repo.GetMeterReadingsByAccountId(reading.AccountId));
         }
 
         [Fact]

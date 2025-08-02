@@ -18,6 +18,7 @@ namespace MeterReadingsApi.UnitTests
 
             public IEnumerable<Account> GetAccounts() => Array.Empty<Account>();
             public Task AddMeterReadingsAsync(IEnumerable<MeterReading> readings) => Task.CompletedTask;
+            public IEnumerable<MeterReading> GetMeterReadingsByAccountId(int accountId) => Array.Empty<MeterReading>();
             public bool AccountExists(int accountId) => AccountExistsReturn;
             public bool ReadingExists(int accountId, DateTime dateTime) => ReadingExistsReturn;
             public bool HasNewerReading(int accountId, DateTime dateTime) => HasNewerReadingReturn;
