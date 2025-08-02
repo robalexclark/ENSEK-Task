@@ -12,10 +12,14 @@ namespace MeterReadingsApi.Validators
             RuleLevelCascadeMode = CascadeMode.Stop;
 
             RuleFor(r => r.AccountId)
-                .Must(repository.AccountExists)
-                .WithMessage("Account does not exist");
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty().WithMessage("AccountId is required")
+                .Must(v => int.TryParse(v, out _)).WithMessage("AccountId must be an integer")
+                .Must(v => repository.AccountExists(int.Parse(v))).WithMessage("Account does not exist");
 
             RuleFor(r => r.MeterReadingDateTime)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty().WithMessage("MeterReadingDateTime is required")
                 .Must(v => TryParseDate(v, out _))
                 .WithMessage("MeterReadingDateTime must be in format dd/MM/yyyy HH:mm");
 
@@ -27,18 +31,22 @@ namespace MeterReadingsApi.Validators
             RuleFor(r => r)
                 .Must(r =>
                 {
+                    if (!int.TryParse(r.AccountId, out int accountId))
+                        return true;
                     if (!TryParseDate(r.MeterReadingDateTime, out DateTime dt))
                         return true;
-                    return !repository.ReadingExists(r.AccountId, dt);
+                    return !repository.ReadingExists(accountId, dt);
                 })
                 .WithMessage("Reading already exists for this account and date/time");
 
             RuleFor(r => r)
                 .Must(r =>
                 {
+                    if (!int.TryParse(r.AccountId, out int accountId))
+                        return true;
                     if (!TryParseDate(r.MeterReadingDateTime, out DateTime dt))
                         return true;
-                    return !repository.HasNewerReading(r.AccountId, dt);
+                    return !repository.HasNewerReading(accountId, dt);
                 })
                 .WithMessage("Reading is older than existing reading");
         }
