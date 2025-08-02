@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using Xunit;
 using System.Linq;
+using System;
 
 namespace MeterReadingsApi.IntegrationTests;
 
@@ -103,6 +104,26 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Upload_FileWithBlankRow_ReturnsBadRequest()
+    {
+        // Arrange - file contains a blank line
+        string csv = "AccountId,MeterReadingDateTime,MeterReadValue\n" +
+                     "2344,16/05/2019 09:24,00123\n" +
+                     "\n" +
+                     "2233,17/05/2019 12:00,00456\n";
+
+        using HttpContent content = CreateCsvContent(csv);
+
+        // Act
+        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
+        string body = await response.Content.ReadAsStringAsync();
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Contains("blank rows", body, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

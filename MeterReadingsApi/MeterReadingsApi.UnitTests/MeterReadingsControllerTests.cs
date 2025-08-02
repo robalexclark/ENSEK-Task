@@ -11,6 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentValidation;
 using FluentValidation.Results;
+using System.IO;
 
 namespace MeterReadingsApi.UnitTests
 {
@@ -31,14 +32,17 @@ namespace MeterReadingsApi.UnitTests
             Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
             Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
-            fileValidator.Setup(v => v.Validate(It.IsAny<MeterReadingUploadRequest>())).Returns(new ValidationResult(new[] { new ValidationFailure("File", "error") }));
+            fileValidator.Setup(v => v.Validate(It.IsAny<MeterReadingUploadRequest>()))
+                .Returns(new ValidationResult(new[] { new ValidationFailure("File", "File contains blank rows") }));
             MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
 
             // Act
             ActionResult result = await controller.MeterReadingUploads(new MeterReadingUploadRequest());
 
             // Assert
-            Assert.IsType<BadRequestObjectResult>(result);
+            BadRequestObjectResult badRequest = Assert.IsType<BadRequestObjectResult>(result);
+            IEnumerable<string> errors = Assert.IsAssignableFrom<IEnumerable<string>>(badRequest.Value);
+            Assert.Contains("File contains blank rows", errors);
             service.Verify(s => s.UploadAsync(It.IsAny<IFormFile>()), Times.Never);
         }
 
@@ -65,6 +69,7 @@ namespace MeterReadingsApi.UnitTests
             Assert.Equal(uploadResult, created.Value);
             service.Verify(s => s.UploadAsync(It.IsAny<IFormFile>()), Times.Once);
         }
+
 
         [Fact]
         public async Task MeterReadingUploads_Returns_MultiStatus_When_Some_Fail()

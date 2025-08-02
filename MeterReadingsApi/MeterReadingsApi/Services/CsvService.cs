@@ -1,4 +1,4 @@
-﻿using CsvHelper;
+using CsvHelper;
 using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.Interfaces;
 using System.Globalization;
@@ -15,19 +15,11 @@ namespace MeterReadingsApi.Services
             using CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture);
             csv.Context.RegisterClassMap<MeterReadingCsvMap>();
             csv.Context.Configuration.MissingFieldFound = null;
+
             List<MeterReadingCsvRecord> records = new List<MeterReadingCsvRecord>();
 
             await foreach (MeterReadingCsvRecord record in csv.GetRecordsAsync<MeterReadingCsvRecord>())
             {
-                bool isBlank = string.IsNullOrWhiteSpace(record.AccountId)
-                                && string.IsNullOrWhiteSpace(record.MeterReadingDateTime)
-                                && string.IsNullOrWhiteSpace(record.MeterReadValue);
-
-                if (isBlank)
-                {
-                    continue;
-                }
-
                 records.Add(record);
             }
 
