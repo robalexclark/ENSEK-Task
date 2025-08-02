@@ -31,17 +31,21 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
     [Fact]
     public async Task Upload_ValidFile_ReturnsCreated()
     {
+        // Arrange
         string csv = "AccountId,MeterReadingDateTime,MeterReadValue\n" +
                   "2344,16/05/2019 09:24,00123\n" +
                   "2233,17/05/2019 12:00,00456\n";
 
         using HttpContent content = CreateCsvContent(csv);
-        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
-        response.EnsureSuccessStatusCode();
-        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
+        // Act
+        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
         string body = await response.Content.ReadAsStringAsync();
         MeterReadingUploadResult result = JsonSerializer.Deserialize<MeterReadingUploadResult>(body)!;
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         Assert.Equal(2, result.Successful);
         Assert.Equal(0, result.Failed);
     }
@@ -50,15 +54,19 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
     [Fact]
     public async Task Upload_InvalidFile_ReturnsUnprocessable()
     {
+        // Arrange
         string csv = "AccountId,MeterReadingDateTime,MeterReadValue\n" +
                   "9999,16/05/2019 09:24,ABCDE\n";
 
         using HttpContent content = CreateCsvContent(csv);
-        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
-        Assert.Equal((HttpStatusCode)422, response.StatusCode);
 
+        // Act
+        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
         string body = await response.Content.ReadAsStringAsync();
         MeterReadingUploadResult result = JsonSerializer.Deserialize<MeterReadingUploadResult>(body)!;
+
+        // Assert
+        Assert.Equal((HttpStatusCode)422, response.StatusCode);
         Assert.Equal(0, result.Successful);
         Assert.Equal(1, result.Failed);
     }
