@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+using AutoMapper;
+using FluentValidation;
 using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
@@ -20,6 +21,7 @@ namespace MeterReadingsApi
             // Services
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
+            builder.Services.AddAutoMapper(typeof(Program));
 
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=meterreadings.db";
             builder.Services.AddDbContext<MeterReadingsContext>(options => options.UseSqlite(connectionString));
@@ -54,3 +56,4 @@ namespace MeterReadingsApi
         }
     }
 }
+
