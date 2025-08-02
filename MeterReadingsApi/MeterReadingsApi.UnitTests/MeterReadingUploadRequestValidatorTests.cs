@@ -37,5 +37,25 @@ namespace MeterReadingsApi.UnitTests
             Assert.False(result.IsValid);
             Assert.Contains(result.Errors, e => e.ErrorMessage.Contains("blank rows"));
         }
+
+        [Fact]
+        public void Validate_ReturnsError_When_HeaderRowIsBlank()
+        {
+            // Arrange
+            string csv = "\n" +
+                         "2344,16/05/2019 09:24,00123\n";
+            MeterReadingUploadRequest request = new MeterReadingUploadRequest
+            {
+                File = CreateFile(csv)
+            };
+            MeterReadingUploadRequestValidator validator = new MeterReadingUploadRequestValidator();
+
+            // Act
+            ValidationResult result = validator.Validate(request);
+
+            // Assert
+            Assert.False(result.IsValid);
+            Assert.Contains(result.Errors, e => e.ErrorMessage.Contains("Invalid or missing headers"));
+        }
     }
 }
