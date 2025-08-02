@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+using AutoMapper;
+using FluentValidation;
 using FluentValidation.Results;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
@@ -15,13 +16,20 @@ namespace MeterReadingsApi.Controllers
         private readonly IMeterReadingsRepository repository;
         private readonly IValidator<int> accountIdValidator;
         private readonly IValidator<MeterReadingUploadRequest> fileValidator;
+        private readonly IMapper mapper;
 
-        public MeterReadingsController(IMeterReadingUploadService uploadService, IMeterReadingsRepository repository, IValidator<int> accountIdValidator, IValidator<MeterReadingUploadRequest> fileValidator)
+        public MeterReadingsController(
+            IMeterReadingUploadService uploadService,
+            IMeterReadingsRepository repository,
+            IValidator<int> accountIdValidator,
+            IValidator<MeterReadingUploadRequest> fileValidator,
+            IMapper mapper)
         {
             this.uploadService = uploadService;
             this.repository = repository;
             this.accountIdValidator = accountIdValidator;
             this.fileValidator = fileValidator;
+            this.mapper = mapper;
         }
 
         [Route("~/accounts/{accountId}/meter-readings")]
@@ -41,7 +49,8 @@ namespace MeterReadingsApi.Controllers
                 return NoContent();
             }
 
-            return Ok(readings);
+            IEnumerable<MeterReadingDto> result = mapper.Map<IEnumerable<MeterReadingDto>>(readings);
+            return Ok(result);
         }
 
         [Route("~/meter-reading-uploads")]
@@ -63,3 +72,4 @@ namespace MeterReadingsApi.Controllers
         }
     }
 }
+

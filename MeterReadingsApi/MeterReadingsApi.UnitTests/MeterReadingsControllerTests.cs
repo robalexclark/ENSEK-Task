@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+using AutoMapper;
+using FluentValidation;
 using FluentValidation.Results;
 using MeterReadingsApi.Controllers;
 using MeterReadingsApi.DataModel;
@@ -31,7 +32,8 @@ namespace MeterReadingsApi.UnitTests
             Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
             fileValidator.Setup(v => v.Validate(It.IsAny<MeterReadingUploadRequest>()))
                 .Returns(new ValidationResult(new[] { new ValidationFailure("File", "File contains blank rows") }));
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<MeterReading, MeterReadingDto>()).CreateMapper();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object, mapper);
 
             // Act
             ActionResult result = await controller.MeterReadingUploads(new MeterReadingUploadRequest());
@@ -55,7 +57,8 @@ namespace MeterReadingsApi.UnitTests
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
             Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
             fileValidator.Setup(v => v.Validate(It.IsAny<MeterReadingUploadRequest>())).Returns(new ValidationResult());
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<MeterReading, MeterReadingDto>()).CreateMapper();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object, mapper);
             IFormFile file = CreateFile();
 
             // Act
@@ -66,7 +69,6 @@ namespace MeterReadingsApi.UnitTests
             Assert.Equal(uploadResult, created.Value);
             service.Verify(s => s.UploadAsync(It.IsAny<IFormFile>()), Times.Once);
         }
-
 
         [Fact]
         public async Task MeterReadingUploads_Returns_MultiStatus_When_Some_Fail()
@@ -80,7 +82,8 @@ namespace MeterReadingsApi.UnitTests
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
             Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
             fileValidator.Setup(v => v.Validate(It.IsAny<MeterReadingUploadRequest>())).Returns(new ValidationResult());
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<MeterReading, MeterReadingDto>()).CreateMapper();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object, mapper);
             IFormFile file = CreateFile();
 
             // Act
@@ -105,7 +108,8 @@ namespace MeterReadingsApi.UnitTests
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
             Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
             fileValidator.Setup(v => v.Validate(It.IsAny<MeterReadingUploadRequest>())).Returns(new ValidationResult());
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<MeterReading, MeterReadingDto>()).CreateMapper();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object, mapper);
             IFormFile file = CreateFile();
 
             // Act
@@ -128,16 +132,19 @@ namespace MeterReadingsApi.UnitTests
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
             validator.Setup(v => v.Validate(1)).Returns(new ValidationResult());
             Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<MeterReading, MeterReadingDto>()).CreateMapper();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object, mapper);
 
             // Act
             ActionResult result = controller.GetByAccountId(1);
 
             // Assert
             OkObjectResult ok = Assert.IsType<OkObjectResult>(result);
-            IEnumerable<MeterReading> readings = Assert.IsAssignableFrom<IEnumerable<MeterReading>>(ok.Value);
-            Assert.Single(readings);
-            Assert.Equal(reading, readings.First());
+            IEnumerable<MeterReadingDto> readings = Assert.IsAssignableFrom<IEnumerable<MeterReadingDto>>(ok.Value);
+            MeterReadingDto dto = Assert.Single(readings);
+            Assert.Equal(reading.AccountId, dto.AccountId);
+            Assert.Equal(reading.MeterReadingDateTime, dto.MeterReadingDateTime);
+            Assert.Equal(reading.MeterReadValue, dto.MeterReadValue);
         }
 
         [Fact]
@@ -150,7 +157,8 @@ namespace MeterReadingsApi.UnitTests
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
             validator.Setup(v => v.Validate(1)).Returns(new ValidationResult());
             Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<MeterReading, MeterReadingDto>()).CreateMapper();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object, mapper);
 
             // Act
             ActionResult result = controller.GetByAccountId(1);
@@ -168,7 +176,8 @@ namespace MeterReadingsApi.UnitTests
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
             validator.Setup(v => v.Validate(1)).Returns(new ValidationResult(new[] { new ValidationFailure("AccountId", "error") }));
             Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<MeterReading, MeterReadingDto>()).CreateMapper();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object, mapper);
 
             // Act
             ActionResult result = controller.GetByAccountId(1);
@@ -178,3 +187,4 @@ namespace MeterReadingsApi.UnitTests
         }
     }
 }
+
