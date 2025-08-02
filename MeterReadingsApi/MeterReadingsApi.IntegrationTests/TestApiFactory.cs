@@ -15,8 +15,8 @@ public class TestApiFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            var descriptors = services.Where(d => d.ServiceType.FullName != null && d.ServiceType.FullName.Contains("MeterReadingsContext")).ToList();
-            foreach (var d in descriptors)
+            List<ServiceDescriptor> descriptors = services.Where(d => d.ServiceType.FullName != null && d.ServiceType.FullName.Contains("MeterReadingsContext")).ToList();
+            foreach (ServiceDescriptor d in descriptors)
             {
                 services.Remove(d);
             }
@@ -25,9 +25,9 @@ public class TestApiFactory : WebApplicationFactory<Program>
                 options.UseInMemoryDatabase("TestDb"));
 
             // Build provider to seed data
-            var sp = services.BuildServiceProvider();
-            using var scope = sp.CreateScope();
-            var repo = scope.ServiceProvider.GetRequiredService<IMeterReadingsRepository>();
+            ServiceProvider sp = services.BuildServiceProvider();
+            using IServiceScope scope = sp.CreateScope();
+            IMeterReadingsRepository repo = scope.ServiceProvider.GetRequiredService<IMeterReadingsRepository>();
             repo.EnsureSeedData();
         });
     }

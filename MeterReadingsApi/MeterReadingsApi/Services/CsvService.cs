@@ -3,6 +3,7 @@ using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.Interfaces;
 using System.Globalization;
 using System.Text;
+using System.IO;
 
 namespace MeterReadingsApi.Services
 {
@@ -10,12 +11,12 @@ namespace MeterReadingsApi.Services
     {
         public async Task<IEnumerable<MeterReadingCsvRecord>> ReadMeterReadingsAsync(Stream stream)
         {
-            using var reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: true);
-            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            using StreamReader reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: true);
+            using CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture);
             csv.Context.RegisterClassMap<MeterReadingCsvMap>();
-            var records = new List<MeterReadingCsvRecord>();
+            List<MeterReadingCsvRecord> records = new List<MeterReadingCsvRecord>();
 
-            await foreach (var record in csv.GetRecordsAsync<MeterReadingCsvRecord>())
+            await foreach (MeterReadingCsvRecord record in csv.GetRecordsAsync<MeterReadingCsvRecord>())
             {
                 records.Add(record);
             }

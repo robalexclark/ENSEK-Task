@@ -11,19 +11,19 @@ namespace MeterReadingsApi.UnitTests
     {
         private static MeterReadingsRepository CreateRepository()
         {
-            var options = new DbContextOptionsBuilder<MeterReadingsContext>()
+            DbContextOptions<MeterReadingsContext> options = new DbContextOptionsBuilder<MeterReadingsContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
-            var context = new MeterReadingsContext(options);
+            MeterReadingsContext context = new MeterReadingsContext(options);
             return new MeterReadingsRepository(context);
         }
 
         [Fact]
         public async Task AddMeterReadingsAsync_PersistsReadings()
         {
-            var repo = CreateRepository();
+            MeterReadingsRepository repo = CreateRepository();
             repo.EnsureSeedData();
-            var reading = new MeterReading
+            MeterReading reading = new MeterReading
             {
                 AccountId = repo.GetAccounts().First().AccountId,
                 MeterReadingDateTime = new DateTime(2024,1,1),
@@ -38,10 +38,10 @@ namespace MeterReadingsApi.UnitTests
         [Fact]
         public async Task QueryMethods_ReturnExpectedResults()
         {
-            var repo = CreateRepository();
+            MeterReadingsRepository repo = CreateRepository();
             repo.EnsureSeedData();
-            var account = repo.GetAccounts().First();
-            var reading = new MeterReading
+            Account account = repo.GetAccounts().First();
+            MeterReading reading = new MeterReading
             {
                 AccountId = account.AccountId,
                 MeterReadingDateTime = new DateTime(2024,1,1),

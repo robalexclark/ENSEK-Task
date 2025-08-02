@@ -6,6 +6,7 @@ using MeterReadingsApi.Validators;
 using MeterReadingsApi.CsvMappers;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Scalar.AspNetCore;
 
 namespace MeterReadingsApi
@@ -14,13 +15,13 @@ namespace MeterReadingsApi
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
             // Services
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=meterreadings.db";
+            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=meterreadings.db";
             builder.Services.AddDbContext<MeterReadingsContext>(options => options.UseSqlite(connectionString));
             builder.Services.AddScoped<IMeterReadingsRepository, MeterReadingsRepository>();
 
@@ -28,11 +29,11 @@ namespace MeterReadingsApi
             builder.Services.AddScoped<IMeterReadingUploadService, MeterReadingUploadService>();
             builder.Services.AddTransient<IValidator<MeterReadingCsvRecord>, MeterReadingCsvRecordValidator>();
 
-            var app = builder.Build();
+            WebApplication app = builder.Build();
 
-            using (var scope = app.Services.CreateScope())
+            using (IServiceScope scope = app.Services.CreateScope())
             {
-                var repo = scope.ServiceProvider.GetRequiredService<IMeterReadingsRepository>();
+                IMeterReadingsRepository repo = scope.ServiceProvider.GetRequiredService<IMeterReadingsRepository>();
                 repo.EnsureSeedData();
             }
 

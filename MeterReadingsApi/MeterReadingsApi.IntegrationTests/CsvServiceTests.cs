@@ -1,4 +1,5 @@
-﻿using MeterReadingsApi.Services;
+﻿using MeterReadingsApi.CsvMappers;
+using MeterReadingsApi.Services;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Xunit;
@@ -11,15 +12,15 @@ namespace MeterReadingsApi.UnitTests
         [Fact]
         public async Task ReadMeterReadingsAsync_ParsesRecordsCorrectly()
         {
-            var csv = "AccountId,MeterReadingDateTime,MeterReadValue\n" +
+            string csv = "AccountId,MeterReadingDateTime,MeterReadValue\n" +
                       "1234,16/05/2019 09:24,00123\n" +
                       "5678,17/05/2019 12:00,00456\n";
 
-            await using var stream = new MemoryStream(Encoding.UTF8.GetBytes(csv));
-            var service = new CsvService();
+            await using MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(csv));
+            CsvService service = new CsvService();
 
-            var result = await service.ReadMeterReadingsAsync(stream);
-            var list = result.ToList();
+            IEnumerable<MeterReadingCsvRecord> result = await service.ReadMeterReadingsAsync(stream);
+            List<MeterReadingCsvRecord> list = result.ToList();
 
             Assert.Equal(2, list.Count);
             Assert.Equal(1234, list[0].AccountId);

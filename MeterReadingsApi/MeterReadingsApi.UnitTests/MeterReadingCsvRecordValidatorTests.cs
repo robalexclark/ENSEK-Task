@@ -1,4 +1,5 @@
-﻿using MeterReadingsApi.CsvMappers;
+﻿using FluentValidation.Results;
+using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Repositories;
 using MeterReadingsApi.Validators;
@@ -26,80 +27,80 @@ namespace MeterReadingsApi.UnitTests
         [Fact]
         public void Valid_record_passes_validation()
         {
-            var repo = new FakeRepository();
-            var validator = new MeterReadingCsvRecordValidator(repo);
-            var record = new MeterReadingCsvRecord
+            FakeRepository repo = new FakeRepository();
+            MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
+            MeterReadingCsvRecord record = new MeterReadingCsvRecord
             {
                 AccountId = 1,
                 MeterReadingDateTime = DateTime.UtcNow,
                 MeterReadValue = "01234"
             };
 
-            var result = validator.Validate(record);
+            ValidationResult result = validator.Validate(record);
             Assert.True(result.IsValid);
         }
 
         [Fact]
         public void Invalid_meter_read_value_fails_validation()
         {
-            var repo = new FakeRepository();
-            var validator = new MeterReadingCsvRecordValidator(repo);
-            var record = new MeterReadingCsvRecord
+            FakeRepository repo = new FakeRepository();
+            MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
+            MeterReadingCsvRecord record = new MeterReadingCsvRecord
             {
                 AccountId = 1,
                 MeterReadingDateTime = DateTime.UtcNow,
                 MeterReadValue = "1234" // only 4 digits
             };
 
-            var result = validator.Validate(record);
+            ValidationResult result = validator.Validate(record);
             Assert.False(result.IsValid);
         }
 
         [Fact]
         public void Duplicate_reading_fails_validation()
         {
-            var repo = new FakeRepository { ReadingExistsReturn = true };
-            var validator = new MeterReadingCsvRecordValidator(repo);
-            var record = new MeterReadingCsvRecord
+            FakeRepository repo = new FakeRepository { ReadingExistsReturn = true };
+            MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
+            MeterReadingCsvRecord record = new MeterReadingCsvRecord
             {
                 AccountId = 1,
                 MeterReadingDateTime = DateTime.UtcNow,
                 MeterReadValue = "12345"
             };
 
-            var result = validator.Validate(record);
+            ValidationResult result = validator.Validate(record);
             Assert.False(result.IsValid);
         }
 
         [Fact]
         public void Older_reading_fails_validation()
         {
-            var repo = new FakeRepository { HasNewerReadingReturn = true };
-            var validator = new MeterReadingCsvRecordValidator(repo);
-            var record = new MeterReadingCsvRecord
+            FakeRepository repo = new FakeRepository { HasNewerReadingReturn = true };
+            MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
+            MeterReadingCsvRecord record = new MeterReadingCsvRecord
             {
                 AccountId = 1,
                 MeterReadingDateTime = DateTime.UtcNow,
                 MeterReadValue = "12345"
             };
 
-            var result = validator.Validate(record);
+            ValidationResult result = validator.Validate(record);
             Assert.False(result.IsValid);
         }
 
         [Fact]
         public void Unknown_account_fails_validation()
         {
-            var repo = new FakeRepository { AccountExistsReturn = false };
-            var validator = new MeterReadingCsvRecordValidator(repo);
-            var record = new MeterReadingCsvRecord
+            FakeRepository repo = new FakeRepository { AccountExistsReturn = false };
+            MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
+            MeterReadingCsvRecord record = new MeterReadingCsvRecord
             {
                 AccountId = 1,
                 MeterReadingDateTime = DateTime.UtcNow,
                 MeterReadValue = "12345"
             };
 
-            var result = validator.Validate(record);
+            ValidationResult result = validator.Validate(record);
             Assert.False(result.IsValid);
         }
     }
