@@ -1,10 +1,9 @@
-﻿namespace MeterReadingsApi.Controllers
-{
-    using MeterReadingsApi.Interfaces;
-    using MeterReadingsApi.Models;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
+﻿using MeterReadingsApi.Interfaces;
+using MeterReadingsApi.Models;
+using Microsoft.AspNetCore.Mvc;
 
+namespace MeterReadingsApi.Controllers
+{
     [Route("api/meter-readings")]
     [ApiController] // automatic 400s on model-binding errors
     public class MeterReadingsController : ControllerBase

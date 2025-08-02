@@ -1,7 +1,6 @@
 ﻿using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Diagnostics.CodeAnalysis;
 using Xunit;
 

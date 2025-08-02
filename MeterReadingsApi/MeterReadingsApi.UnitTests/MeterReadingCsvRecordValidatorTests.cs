@@ -1,8 +1,8 @@
-﻿using MeterReadingsApi.CsvMappers;
+﻿using FluentValidation.Results;
+using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Repositories;
 using MeterReadingsApi.Validators;
-using FluentValidation.Results;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MeterReadingsApi.UnitTests

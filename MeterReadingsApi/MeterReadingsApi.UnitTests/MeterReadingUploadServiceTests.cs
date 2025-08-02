@@ -3,13 +3,12 @@ using FluentValidation.Results;
 using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
+using MeterReadingsApi.Models;
 using MeterReadingsApi.Repositories;
 using MeterReadingsApi.Services;
-using MeterReadingsApi.Models;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
 namespace MeterReadingsApi.UnitTests
 {
@@ -18,7 +17,7 @@ namespace MeterReadingsApi.UnitTests
     {
         private static Mock<IFormFile> CreateFile()
         {
-            MemoryStream stream = new MemoryStream(new byte[] {1});
+            MemoryStream stream = new MemoryStream(new byte[] { 1 });
             Mock<IFormFile> mock = new Mock<IFormFile>();
             mock.Setup(f => f.OpenReadStream()).Returns(stream);
             mock.Setup(f => f.Length).Returns(stream.Length);

@@ -1,11 +1,10 @@
-using MeterReadingsApi.Controllers;
+﻿using MeterReadingsApi.Controllers;
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
 namespace MeterReadingsApi.UnitTests
 {
