@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
 using FluentValidation.Results;
 using MeterReadingsApi.CsvMappers;
@@ -16,6 +17,7 @@ using Xunit;
 
 namespace MeterReadingsApi.UnitTests
 {
+    [ExcludeFromCodeCoverage]
     public class MeterReadingUploadServiceTests
     {
         private static Mock<IFormFile> CreateFile()
