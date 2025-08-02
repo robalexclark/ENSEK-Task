@@ -14,11 +14,12 @@ namespace MeterReadingsApi.Services
             using StreamReader reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: true);
             using CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture);
             csv.Context.RegisterClassMap<MeterReadingCsvMap>();
+            csv.Context.Configuration.MissingFieldFound = null;
             List<MeterReadingCsvRecord> records = new List<MeterReadingCsvRecord>();
 
             await foreach (MeterReadingCsvRecord record in csv.GetRecordsAsync<MeterReadingCsvRecord>())
             {
-                bool isBlank = record.AccountId == 0
+                bool isBlank = string.IsNullOrWhiteSpace(record.AccountId)
                                 && string.IsNullOrWhiteSpace(record.MeterReadingDateTime)
                                 && string.IsNullOrWhiteSpace(record.MeterReadValue);
 

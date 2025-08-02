@@ -45,12 +45,13 @@ namespace MeterReadingsApi.Services
                     continue;
                 }
 
+                int accountId = int.Parse(record.AccountId);
                 int value = int.Parse(record.MeterReadValue);
                 DateTime date = DateTime.ParseExact(record.MeterReadingDateTime, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
 
                 validReadings.Add(new MeterReading
                 {
-                    AccountId = record.AccountId,
+                    AccountId = accountId,
                     MeterReadingDateTime = date,
                     MeterReadValue = value
                 });

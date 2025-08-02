@@ -34,8 +34,8 @@ namespace MeterReadingsApi.UnitTests
             // Arrange
             MeterReadingCsvRecord[] records = new[]
             {
-                new MeterReadingCsvRecord { AccountId = 1, MeterReadingDateTime = "01/01/2020 00:00", MeterReadValue = "12345" },
-                new MeterReadingCsvRecord { AccountId = 2, MeterReadingDateTime = "01/01/2020 00:00", MeterReadValue = "54321" }
+                new MeterReadingCsvRecord { AccountId = "1", MeterReadingDateTime = "01/01/2020 00:00", MeterReadValue = "12345" },
+                new MeterReadingCsvRecord { AccountId = "2", MeterReadingDateTime = "01/01/2020 00:00", MeterReadValue = "54321" }
             };
 
             Mock<ICSVService> csvService = new Mock<ICSVService>();
@@ -65,8 +65,8 @@ namespace MeterReadingsApi.UnitTests
             // Arrange
             MeterReadingCsvRecord[] records = new[]
             {
-                new MeterReadingCsvRecord { AccountId = 1, MeterReadingDateTime = "01/01/2020 00:00", MeterReadValue = "12345" },
-                new MeterReadingCsvRecord { AccountId = 2, MeterReadingDateTime = "01/01/2020 00:00", MeterReadValue = "99999" }
+                new MeterReadingCsvRecord { AccountId = "1", MeterReadingDateTime = "01/01/2020 00:00", MeterReadValue = "12345" },
+                new MeterReadingCsvRecord { AccountId = "2", MeterReadingDateTime = "01/01/2020 00:00", MeterReadValue = "99999" }
             };
 
             Mock<ICSVService> csvService = new Mock<ICSVService>();
