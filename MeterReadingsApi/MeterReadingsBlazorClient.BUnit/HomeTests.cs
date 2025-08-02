@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Reflection;
 
+namespace MeterReadingsBlazorClient.BUnit;
+
 public partial class HomeTests : BlazoriseTestBase
 {
     [Fact]

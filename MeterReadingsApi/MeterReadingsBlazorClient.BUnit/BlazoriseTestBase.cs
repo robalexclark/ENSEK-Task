@@ -2,6 +2,8 @@
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 
+namespace MeterReadingsBlazorClient.BUnit;
+
 public abstract class BlazoriseTestBase : TestContext
 {
     protected BlazoriseTestBase()

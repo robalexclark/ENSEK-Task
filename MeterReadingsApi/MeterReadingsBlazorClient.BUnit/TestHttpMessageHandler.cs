@@ -1,3 +1,5 @@
+﻿namespace MeterReadingsBlazorClient.BUnit;
+
 public partial class HomeTests
 {
     private class TestHttpMessageHandler : HttpMessageHandler
