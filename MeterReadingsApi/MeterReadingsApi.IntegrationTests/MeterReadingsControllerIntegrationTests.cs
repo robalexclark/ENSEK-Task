@@ -75,6 +75,7 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         Assert.Equal(1, result.Failed);
         MeterReadingUploadFailure failure = Assert.Single(result.Failures);
         Assert.Equal(2, failure.RowNumber);
+        Assert.Equal(9999, failure.AccountId);
     }
 
     [Fact]
@@ -147,6 +148,7 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         Assert.Equal(1, result.Failed);
         MeterReadingUploadFailure failure2 = Assert.Single(result.Failures);
         Assert.Equal(3, failure2.RowNumber);
+        Assert.Equal(9999, failure2.AccountId);
     }
 
     [Fact]

@@ -91,7 +91,37 @@ namespace MeterReadingsApi.UnitTests
             Assert.Equal(1, result.Failed);
             MeterReadingUploadFailure failure = Assert.Single(result.Failures);
             Assert.Equal(3, failure.RowNumber);
+            Assert.Equal(2, failure.AccountId);
             Assert.Contains("MeterReadValue", failure.Reason);
+        }
+
+        [Fact]
+        public async Task UploadAsync_InvalidRecordWithoutParsableAccountId_OmitsAccountId()
+        {
+            // Arrange
+            MeterReadingCsvRecord[] records = new[]
+            {
+                new MeterReadingCsvRecord { AccountId = "ABC", MeterReadingDateTime = "01/01/2020 00:00", MeterReadValue = "12345" }
+            };
+
+            Mock<ICSVService> csvService = new Mock<ICSVService>();
+            csvService.Setup(s => s.ReadMeterReadingsAsync(It.IsAny<Stream>())).ReturnsAsync(records);
+
+            Mock<IMeterReadingsRepository> repository = new Mock<IMeterReadingsRepository>();
+            Mock<IValidator<MeterReadingCsvRecord>> validator = new Mock<IValidator<MeterReadingCsvRecord>>();
+            validator.Setup(v => v.Validate(It.IsAny<MeterReadingCsvRecord>())).Returns(Invalid());
+
+            MeterReadingUploadService service = new MeterReadingUploadService(csvService.Object, repository.Object, validator.Object);
+            Mock<IFormFile> file = CreateFile();
+
+            // Act
+            MeterReadingUploadResult result = await service.UploadAsync(file.Object);
+
+            // Assert
+            Assert.Equal(0, result.Successful);
+            Assert.Equal(1, result.Failed);
+            MeterReadingUploadFailure failure = Assert.Single(result.Failures);
+            Assert.Null(failure.AccountId);
         }
     }
 }

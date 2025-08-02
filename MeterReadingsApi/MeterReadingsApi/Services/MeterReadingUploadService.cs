@@ -40,7 +40,8 @@ namespace MeterReadingsApi.Services
                 {
                     failed++;
                     string reason = string.Join("; ", result.Errors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}"));
-                    failureDetails.Add(new MeterReadingUploadFailure(rowNumber, reason));
+                    int? failureAccountId = int.TryParse(record.AccountId, out int parsedAccountId) ? parsedAccountId : null;
+                    failureDetails.Add(new MeterReadingUploadFailure(rowNumber, failureAccountId, reason));
                     rowNumber++;
                     continue;
                 }
