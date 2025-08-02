@@ -40,6 +40,15 @@
 
     private async Task OnAccountSelected(AccountDto account)
     {
-        meterReadings = await Http.GetFromJsonAsync<IList<MeterReadingDto>>($"accounts/{account.AccountId}/meter-readings");
+        var response = await Http.GetAsync($"accounts/{account.AccountId}/meter-readings");
+        if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+        {
+            meterReadings = Array.Empty<MeterReadingDto>();
+        }
+        else
+        {
+            response.EnsureSuccessStatusCode();
+            meterReadings = await response.Content.ReadFromJsonAsync<IList<MeterReadingDto>>();
+        }
     }
 }
