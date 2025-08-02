@@ -18,6 +18,15 @@ namespace MeterReadingsApi.Services
 
             await foreach (MeterReadingCsvRecord record in csv.GetRecordsAsync<MeterReadingCsvRecord>())
             {
+                bool isBlank = record.AccountId == 0
+                                && string.IsNullOrWhiteSpace(record.MeterReadingDateTime)
+                                && string.IsNullOrWhiteSpace(record.MeterReadValue);
+
+                if (isBlank)
+                {
+                    continue;
+                }
+
                 records.Add(record);
             }
 
