@@ -3,11 +3,9 @@ using FluentValidation.Results;
 using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
-using MeterReadingsApi.Repositories;
 using MeterReadingsApi.Models;
+using MeterReadingsApi.Repositories;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 
 namespace MeterReadingsApi.Services
 {
