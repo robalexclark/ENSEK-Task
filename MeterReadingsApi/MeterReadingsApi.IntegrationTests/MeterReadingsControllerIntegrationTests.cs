@@ -50,6 +50,7 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         Assert.Equal(2, result.Successful);
         Assert.Equal(0, result.Failed);
+        Assert.Empty(result.Failures);
     }
 
 
@@ -71,6 +72,8 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         Assert.Equal((HttpStatusCode)422, response.StatusCode);
         Assert.Equal(0, result.Successful);
         Assert.Equal(1, result.Failed);
+        MeterReadingUploadFailure failure = Assert.Single(result.Failures);
+        Assert.Equal(2, failure.RowNumber);
     }
 
     [Fact]
@@ -92,6 +95,8 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         Assert.Equal((HttpStatusCode)207, response.StatusCode);
         Assert.Equal(1, result.Successful);
         Assert.Equal(1, result.Failed);
+        MeterReadingUploadFailure failure2 = Assert.Single(result.Failures);
+        Assert.Equal(3, failure2.RowNumber);
     }
 
     [Fact]

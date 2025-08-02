@@ -56,6 +56,7 @@ namespace MeterReadingsApi.UnitTests
             repository.Verify(r => r.AddMeterReadingsAsync(It.Is<IEnumerable<MeterReading>>(l => l != null && l.Count() == 2)), Times.Once);
             Assert.Equal(2, result.Successful);
             Assert.Equal(0, result.Failed);
+            Assert.Empty(result.Failures);
         }
 
         [Fact]
@@ -88,6 +89,9 @@ namespace MeterReadingsApi.UnitTests
             repository.Verify(r => r.AddMeterReadingsAsync(It.Is<IEnumerable<MeterReading>>(l => l.Count() == 1)), Times.Once);
             Assert.Equal(1, result.Successful);
             Assert.Equal(1, result.Failed);
+            MeterReadingUploadFailure failure = Assert.Single(result.Failures);
+            Assert.Equal(3, failure.RowNumber);
+            Assert.Contains("MeterReadValue", failure.Reason);
         }
     }
 }

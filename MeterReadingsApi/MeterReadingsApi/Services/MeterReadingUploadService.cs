@@ -4,8 +4,10 @@ using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Repositories;
+using MeterReadingsApi.Models;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 
 namespace MeterReadingsApi.Services
 {
@@ -28,8 +30,10 @@ namespace MeterReadingsApi.Services
             IEnumerable<MeterReadingCsvRecord> records = await csvService.ReadMeterReadingsAsync(stream);
 
             List<MeterReading> validReadings = new List<MeterReading>();
+            List<MeterReadingUploadFailure> failureDetails = new List<MeterReadingUploadFailure>();
             int success = 0;
             int failed = 0;
+            int rowNumber = 2; // account for header row
 
             foreach (MeterReadingCsvRecord record in records)
             {
@@ -37,6 +41,9 @@ namespace MeterReadingsApi.Services
                 if (!result.IsValid)
                 {
                     failed++;
+                    string reason = string.Join("; ", result.Errors.Select(e => $"{e.PropertyName}: {e.ErrorMessage}"));
+                    failureDetails.Add(new MeterReadingUploadFailure(rowNumber, reason));
+                    rowNumber++;
                     continue;
                 }
 
@@ -51,6 +58,7 @@ namespace MeterReadingsApi.Services
                 });
 
                 success++;
+                rowNumber++;
             }
 
             if (validReadings.Count > 0)
@@ -58,7 +66,7 @@ namespace MeterReadingsApi.Services
                 await repository.AddMeterReadingsAsync(validReadings);
             }
 
-            return new Models.MeterReadingUploadResult(success, failed);
+            return new MeterReadingUploadResult(success, failed, failureDetails);
         }
     }
 }

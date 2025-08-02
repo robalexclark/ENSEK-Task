@@ -67,7 +67,7 @@ namespace MeterReadingsApi.UnitTests
             // Arrange
             Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
             Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
-            MeterReadingUploadResult uploadResult = new MeterReadingUploadResult(1, 0);
+            MeterReadingUploadResult uploadResult = new MeterReadingUploadResult(1, 0, Array.Empty<MeterReadingUploadFailure>());
             service.Setup(s => s.UploadAsync(It.IsAny<IFormFile>())).ReturnsAsync(uploadResult);
 
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
@@ -89,7 +89,7 @@ namespace MeterReadingsApi.UnitTests
             // Arrange
             Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
             Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
-            MeterReadingUploadResult uploadResult = new MeterReadingUploadResult(1, 1);
+            MeterReadingUploadResult uploadResult = new MeterReadingUploadResult(1, 1, new[] { new MeterReadingUploadFailure(2, "error") });
             service.Setup(s => s.UploadAsync(It.IsAny<IFormFile>())).ReturnsAsync(uploadResult);
 
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
@@ -112,7 +112,7 @@ namespace MeterReadingsApi.UnitTests
             // Arrange
             Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
             Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
-            MeterReadingUploadResult uploadResult = new MeterReadingUploadResult(0, 1);
+            MeterReadingUploadResult uploadResult = new MeterReadingUploadResult(0, 1, new[] { new MeterReadingUploadFailure(2, "error") });
             service.Setup(s => s.UploadAsync(It.IsAny<IFormFile>())).ReturnsAsync(uploadResult);
 
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
