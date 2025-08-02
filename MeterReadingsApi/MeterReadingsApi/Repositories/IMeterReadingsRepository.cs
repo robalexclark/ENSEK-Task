@@ -6,6 +6,7 @@ namespace MeterReadingsApi.Repositories
     {
         IEnumerable<Account> GetAccounts();
         Task AddMeterReadingsAsync(IEnumerable<MeterReading> readings);
+        IEnumerable<MeterReading> GetMeterReadingsByAccountId(int accountId);
         bool AccountExists(int accountId);
         bool ReadingExists(int accountId, DateTime dateTime);
         bool HasNewerReading(int accountId, DateTime dateTime);

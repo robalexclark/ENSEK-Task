@@ -1,10 +1,13 @@
 ﻿using MeterReadingsApi.Controllers;
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Models;
+using MeterReadingsApi.Repositories;
+using MeterReadingsApi.DataModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace MeterReadingsApi.UnitTests
 {
@@ -22,7 +25,8 @@ namespace MeterReadingsApi.UnitTests
         {
             // Arrange
             Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
-            MeterReadingsController controller = new MeterReadingsController(service.Object);
+            Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object);
 
             // Act
             ActionResult result = await controller.MeterReadingUploads(null);
@@ -38,7 +42,8 @@ namespace MeterReadingsApi.UnitTests
         {
             // Arrange
             Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
-            MeterReadingsController controller = new MeterReadingsController(service.Object);
+            Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object);
             Mock<IFormFile> file = new Mock<IFormFile>();
             file.Setup(f => f.Length).Returns(0);
 
@@ -56,10 +61,11 @@ namespace MeterReadingsApi.UnitTests
         {
             // Arrange
             Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
+            Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
             MeterReadingUploadResult uploadResult = new MeterReadingUploadResult(1, 0);
             service.Setup(s => s.UploadAsync(It.IsAny<IFormFile>())).ReturnsAsync(uploadResult);
 
-            MeterReadingsController controller = new MeterReadingsController(service.Object);
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object);
             IFormFile file = CreateFile();
 
             // Act
@@ -76,10 +82,11 @@ namespace MeterReadingsApi.UnitTests
         {
             // Arrange
             Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
+            Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
             MeterReadingUploadResult uploadResult = new MeterReadingUploadResult(1, 1);
             service.Setup(s => s.UploadAsync(It.IsAny<IFormFile>())).ReturnsAsync(uploadResult);
 
-            MeterReadingsController controller = new MeterReadingsController(service.Object);
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object);
             IFormFile file = CreateFile();
 
             // Act
@@ -97,10 +104,11 @@ namespace MeterReadingsApi.UnitTests
         {
             // Arrange
             Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
+            Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
             MeterReadingUploadResult uploadResult = new MeterReadingUploadResult(0, 1);
             service.Setup(s => s.UploadAsync(It.IsAny<IFormFile>())).ReturnsAsync(uploadResult);
 
-            MeterReadingsController controller = new MeterReadingsController(service.Object);
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object);
             IFormFile file = CreateFile();
 
             // Act
@@ -113,17 +121,40 @@ namespace MeterReadingsApi.UnitTests
         }
 
         [Fact]
-        public void GetByAccountId_Returns_Ok()
+        public void GetByAccountId_Returns_Readings()
         {
             // Arrange
             Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
-            MeterReadingsController controller = new MeterReadingsController(service.Object);
+            Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
+            MeterReading reading = new MeterReading { AccountId = 1, MeterReadingDateTime = DateTime.UtcNow, MeterReadValue = 100 };
+            repo.Setup(r => r.AccountExists(1)).Returns(true);
+            repo.Setup(r => r.GetMeterReadingsByAccountId(1)).Returns(new[] { reading });
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object);
 
             // Act
             ActionResult result = controller.GetByAccountId(1);
 
             // Assert
-            Assert.IsType<OkResult>(result);
+            OkObjectResult ok = Assert.IsType<OkObjectResult>(result);
+            IEnumerable<MeterReading> readings = Assert.IsAssignableFrom<IEnumerable<MeterReading>>(ok.Value);
+            Assert.Single(readings);
+            Assert.Equal(reading, readings.First());
+        }
+
+        [Fact]
+        public void GetByAccountId_Returns_NotFound_When_Account_Does_Not_Exist()
+        {
+            // Arrange
+            Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
+            Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
+            repo.Setup(r => r.AccountExists(1)).Returns(false);
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object);
+
+            // Act
+            ActionResult result = controller.GetByAccountId(1);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
         }
     }
 }

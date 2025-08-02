@@ -1,5 +1,7 @@
-﻿using MeterReadingsApi.Interfaces;
+using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Models;
+using MeterReadingsApi.Repositories;
+using MeterReadingsApi.DataModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeterReadingsApi.Controllers
@@ -9,17 +11,31 @@ namespace MeterReadingsApi.Controllers
     public class MeterReadingsController : ControllerBase
     {
         private readonly IMeterReadingUploadService uploadService;
+        private readonly IMeterReadingsRepository repository;
 
-        public MeterReadingsController(IMeterReadingUploadService uploadService)
+        public MeterReadingsController(IMeterReadingUploadService uploadService, IMeterReadingsRepository repository)
         {
             this.uploadService = uploadService;
+            this.repository = repository;
         }
 
-        [Route("~/accounts/{id}/meter-readings")]
+        [Route("~/accounts/{accountId}/meter-readings")]
         [HttpGet]
         public ActionResult GetByAccountId(int accountId)
         {
-            return Ok();
+            if (!repository.AccountExists(accountId))
+            {
+                return NotFound();
+            }
+
+            IEnumerable<MeterReading> readings = repository.GetMeterReadingsByAccountId(accountId);
+
+            if (!readings.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(readings);
         }
 
         [Route("meter-reading-uploads")]
