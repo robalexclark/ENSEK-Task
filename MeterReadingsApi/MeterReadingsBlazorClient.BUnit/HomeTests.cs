@@ -1,4 +1,5 @@
-﻿using MeterReadingsApi.Shared;
+﻿using Bunit;
+using MeterReadingsApi.Shared;
 using MeterReadingsBlazorClient.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
@@ -69,17 +70,18 @@ public partial class HomeTests : BlazoriseTestBase
         HttpClient client = new(handler) { BaseAddress = new Uri("http://localhost") };
         Services.AddSingleton(client);
         IRenderedComponent<Home> cut = RenderComponent<Home>();
-        AccountDto account = new() { AccountId = 1, FirstName = "Jane", LastName = "Doe" };
-        MethodInfo method = typeof(Home).GetMethod("OnAccountSelected", BindingFlags.Instance | BindingFlags.NonPublic)!;
 
         // Act
-        await cut.InvokeAsync(() => (Task)method.Invoke(cut.Instance, new object[] { account })!);
+        await cut.InvokeAsync(() => cut.Find("tbody tr").Click());
 
         // Assert
         FieldInfo? meterReadingsField = typeof(Home).GetField("meterReadings", BindingFlags.NonPublic | BindingFlags.Instance);
-        IList<MeterReadingDto>? readings = meterReadingsField?.GetValue(cut.Instance) as IList<MeterReadingDto>;
-        Assert.NotNull(readings);
-        Assert.Single(readings!);
-        Assert.Equal(12345, readings![0].MeterReadValue);
+        cut.WaitForAssertion(() =>
+        {
+            IList<MeterReadingDto>? readings = meterReadingsField?.GetValue(cut.Instance) as IList<MeterReadingDto>;
+            Assert.NotNull(readings);
+            Assert.Single(readings!);
+            Assert.Equal(12345, readings![0].MeterReadValue);
+        });
     }
 }
