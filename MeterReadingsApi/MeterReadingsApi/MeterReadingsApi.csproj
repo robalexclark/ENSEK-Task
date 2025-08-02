@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MeterReadingsApi.DataModel\MeterReadingsApi.DataModel.csproj" />
+    <ProjectReference Include="..\MeterReadingsApi.Shared\MeterReadingsApi.Shared.csproj" />
   </ItemGroup>
 
 </Project>

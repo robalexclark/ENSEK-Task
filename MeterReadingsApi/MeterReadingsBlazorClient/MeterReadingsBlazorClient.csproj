@@ -15,4 +15,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.7" PrivateAssets="all" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MeterReadingsApi.Shared\MeterReadingsApi.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
