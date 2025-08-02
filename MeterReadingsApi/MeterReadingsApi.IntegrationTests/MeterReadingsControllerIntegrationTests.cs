@@ -1,5 +1,5 @@
-﻿using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Models;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http.Headers;
@@ -163,13 +163,14 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         HttpResponseMessage response = await client.GetAsync("/accounts/2344/meter-readings");
         response.EnsureSuccessStatusCode();
         string body = await response.Content.ReadAsStringAsync();
-        List<MeterReading> readings = JsonSerializer.Deserialize<List<MeterReading>>(body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+        Assert.DoesNotContain("\"account\":", body, StringComparison.OrdinalIgnoreCase);
+        List<MeterReadingDto> readings = JsonSerializer.Deserialize<List<MeterReadingDto>>(body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
 
         // Assert
         Assert.NotEmpty(readings);
-        MeterReading reading = readings.First();
+        MeterReadingDto reading = readings.First();
         Assert.Equal(2344, reading.AccountId);
-       Assert.Equal(123, reading.MeterReadValue);
+        Assert.Equal(123, reading.MeterReadValue);
     }
 
     [Fact]
@@ -192,3 +193,4 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 }
+
