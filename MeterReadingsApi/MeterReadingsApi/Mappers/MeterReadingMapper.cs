@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Models;
 
@@ -12,4 +12,3 @@ namespace MeterReadingsApi.Mappers
         }
     }
 }
-

@@ -1,4 +1,4 @@
-using MeterReadingsApi.Models;
+﻿using MeterReadingsApi.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using Xunit;
@@ -40,4 +40,3 @@ public class AccountsControllerIntegrationTests : IClassFixture<TestApiFactory>
         }
     }
 }
-

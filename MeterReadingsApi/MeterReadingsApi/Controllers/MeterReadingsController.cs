@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
 using MeterReadingsApi.DataModel;
@@ -72,4 +72,3 @@ namespace MeterReadingsApi.Controllers
         }
     }
 }
-

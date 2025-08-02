@@ -1,5 +1,4 @@
-using MeterReadingsApi.Models;
-using System;
+﻿using MeterReadingsApi.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http.Headers;
@@ -193,4 +192,3 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 }
-
