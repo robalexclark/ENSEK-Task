@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MeterReadingsApi.Controllers
 {
-    [Route("api/meter-readings")]
     [ApiController] // automatic 400s on model-binding errors
     public class MeterReadingsController : ControllerBase
     {
@@ -45,7 +44,7 @@ namespace MeterReadingsApi.Controllers
             return Ok(readings);
         }
 
-        [Route("meter-reading-uploads")]
+        [Route("~/meter-reading-uploads")]
         [HttpPost]
         public async Task<ActionResult> MeterReadingUploads([FromForm] MeterReadingUploadRequest request)
         {

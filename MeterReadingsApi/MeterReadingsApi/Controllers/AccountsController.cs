@@ -1,4 +1,4 @@
-using MeterReadingsApi.DataModel;
+﻿using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

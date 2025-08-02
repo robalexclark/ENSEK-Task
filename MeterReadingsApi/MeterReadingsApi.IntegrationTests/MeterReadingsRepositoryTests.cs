@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 using Xunit;
 
-namespace MeterReadingsApi.UnitTests
+namespace MeterReadingsApi.IntegrationTests
 {
     [ExcludeFromCodeCoverage]
     public class MeterReadingsRepositoryTests

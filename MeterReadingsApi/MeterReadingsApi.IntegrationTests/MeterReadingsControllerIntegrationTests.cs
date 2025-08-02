@@ -40,7 +40,7 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         using HttpContent content = CreateCsvContent(csv);
 
         // Act
-        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
+        HttpResponseMessage response = await client.PostAsync("/meter-reading-uploads", content);
         string body = await response.Content.ReadAsStringAsync();
         MeterReadingUploadResult result = JsonSerializer.Deserialize<MeterReadingUploadResult>(body)!;
 
@@ -62,7 +62,7 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         using HttpContent content = CreateCsvContent(csv);
 
         // Act
-        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
+        HttpResponseMessage response = await client.PostAsync("/meter-reading-uploads", content);
         string body = await response.Content.ReadAsStringAsync();
         MeterReadingUploadResult result = JsonSerializer.Deserialize<MeterReadingUploadResult>(body)!;
 
@@ -82,7 +82,7 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         MultipartFormDataContent content = new MultipartFormDataContent();
 
         // Act
-        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
+        HttpResponseMessage response = await client.PostAsync("/meter-reading-uploads", content);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -98,7 +98,7 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         using HttpContent content = CreateCsvContent(csv);
 
         // Act
-        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
+        HttpResponseMessage response = await client.PostAsync("/meter-reading-uploads", content);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -116,7 +116,7 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         using HttpContent content = CreateCsvContent(csv);
 
         // Act
-        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
+        HttpResponseMessage response = await client.PostAsync("/meter-reading-uploads", content);
         string body = await response.Content.ReadAsStringAsync();
 
         // Assert
@@ -135,7 +135,7 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         using HttpContent content = CreateCsvContent(csv);
 
         // Act
-        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
+        HttpResponseMessage response = await client.PostAsync("/meter-reading-uploads", content);
         string body = await response.Content.ReadAsStringAsync();
         MeterReadingUploadResult result = JsonSerializer.Deserialize<MeterReadingUploadResult>(body)!;
 
@@ -156,7 +156,7 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
                      "2344,18/05/2019 09:24,00123\n";
 
         using HttpContent content = CreateCsvContent(csv);
-        HttpResponseMessage upload = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
+        HttpResponseMessage upload = await client.PostAsync("/meter-reading-uploads", content);
         upload.EnsureSuccessStatusCode();
 
         // Act
