@@ -31,7 +31,7 @@ namespace MeterReadingsApi.UnitTests
         [Fact]
         public async Task UploadAsync_Adds_valid_readings_and_returns_counts()
         {
-            // arrange
+            // Arrange
             MeterReadingCsvRecord[] records = new[]
             {
                 new MeterReadingCsvRecord { AccountId = 1, MeterReadingDateTime = DateTime.UtcNow, MeterReadValue = "12345" },
@@ -49,10 +49,10 @@ namespace MeterReadingsApi.UnitTests
 
             Mock<IFormFile> file = CreateFile();
 
-            // act
+            // Act
             MeterReadingUploadResult result = await service.UploadAsync(file.Object);
 
-            // assert
+            // Assert
             repository.Verify(r => r.AddMeterReadingsAsync(It.Is<IEnumerable<MeterReading>>(l => l != null && l.Count() == 2)), Times.Once);
             Assert.Equal(2, result.Successful);
             Assert.Equal(0, result.Failed);
@@ -61,7 +61,7 @@ namespace MeterReadingsApi.UnitTests
         [Fact]
         public async Task UploadAsync_Handles_invalid_records()
         {
-            // arrange
+            // Arrange
             MeterReadingCsvRecord[] records = new[]
             {
                 new MeterReadingCsvRecord { AccountId = 1, MeterReadingDateTime = DateTime.UtcNow, MeterReadValue = "12345" },
@@ -81,10 +81,10 @@ namespace MeterReadingsApi.UnitTests
 
             Mock<IFormFile> file = CreateFile();
 
-            // act
+            // Act
             MeterReadingUploadResult result = await service.UploadAsync(file.Object);
 
-            // assert
+            // Assert
             repository.Verify(r => r.AddMeterReadingsAsync(It.Is<IEnumerable<MeterReading>>(l => l.Count() == 1)), Times.Once);
             Assert.Equal(1, result.Successful);
             Assert.Equal(1, result.Failed);
