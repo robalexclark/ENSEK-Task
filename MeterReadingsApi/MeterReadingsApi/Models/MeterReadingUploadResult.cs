@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace MeterReadingsApi.Models;
 
@@ -11,4 +10,3 @@ public readonly record struct MeterReadingUploadResult(
     [property: JsonPropertyName("successful")] int Successful,
     [property: JsonPropertyName("failed")] int Failed,
     [property: JsonPropertyName("failures")] IReadOnlyList<MeterReadingUploadFailure> Failures);
-

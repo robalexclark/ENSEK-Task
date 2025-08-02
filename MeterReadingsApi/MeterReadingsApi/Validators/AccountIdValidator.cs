@@ -1,4 +1,4 @@
-using FluentValidation;
+﻿using FluentValidation;
 using MeterReadingsApi.Repositories;
 
 namespace MeterReadingsApi.Validators

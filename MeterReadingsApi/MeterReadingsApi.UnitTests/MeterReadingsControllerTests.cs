@@ -1,17 +1,14 @@
-﻿using MeterReadingsApi.Controllers;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using MeterReadingsApi.Controllers;
+using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Models;
 using MeterReadingsApi.Repositories;
-using MeterReadingsApi.DataModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using FluentValidation;
-using FluentValidation.Results;
-using System.IO;
 
 namespace MeterReadingsApi.UnitTests
 {

@@ -1,13 +1,11 @@
-﻿using MeterReadingsApi.Models;
-using MeterReadingsApi.DataModel;
+﻿using MeterReadingsApi.DataModel;
+using MeterReadingsApi.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Xunit;
-using System.Linq;
-using System;
 
 namespace MeterReadingsApi.IntegrationTests;
 
@@ -53,7 +51,6 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         Assert.Equal(0, result.Failed);
         Assert.Empty(result.Failures);
     }
-
 
     [Fact]
     public async Task Upload_InvalidFile_ReturnsUnprocessable()

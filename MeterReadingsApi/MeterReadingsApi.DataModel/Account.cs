@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace MeterReadingsApi.DataModel
+﻿namespace MeterReadingsApi.DataModel
 {
     public class Account
     {

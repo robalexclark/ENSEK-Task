@@ -1,13 +1,12 @@
-﻿using MeterReadingsApi.DataModel;
+﻿using FluentValidation;
+using MeterReadingsApi.CsvMappers;
+using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
+using MeterReadingsApi.Models;
 using MeterReadingsApi.Repositories;
 using MeterReadingsApi.Services;
 using MeterReadingsApi.Validators;
-using MeterReadingsApi.CsvMappers;
-using MeterReadingsApi.Models;
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Scalar.AspNetCore;
 
 namespace MeterReadingsApi

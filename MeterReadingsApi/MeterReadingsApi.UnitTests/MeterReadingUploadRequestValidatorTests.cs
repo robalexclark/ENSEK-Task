@@ -1,13 +1,13 @@
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using MeterReadingsApi.Models;
 using MeterReadingsApi.Validators;
 using Microsoft.AspNetCore.Http;
-using System.IO;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using Xunit;
 
 namespace MeterReadingsApi.UnitTests
 {
+    [ExcludeFromCodeCoverage]
     public class MeterReadingUploadRequestValidatorTests
     {
         private static IFormFile CreateFile(string content)

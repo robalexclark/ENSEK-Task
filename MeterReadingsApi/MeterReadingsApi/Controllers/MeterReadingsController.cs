@@ -1,10 +1,10 @@
+﻿using FluentValidation;
+using FluentValidation.Results;
+using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Models;
 using MeterReadingsApi.Repositories;
-using MeterReadingsApi.DataModel;
 using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
-using FluentValidation.Results;
 
 namespace MeterReadingsApi.Controllers
 {

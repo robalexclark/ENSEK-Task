@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Http;
-
-namespace MeterReadingsApi.Models
+﻿namespace MeterReadingsApi.Models
 {
     public class MeterReadingUploadRequest
     {

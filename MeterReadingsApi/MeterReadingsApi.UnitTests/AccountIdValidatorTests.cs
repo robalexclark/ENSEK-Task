@@ -1,9 +1,8 @@
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using MeterReadingsApi.Repositories;
 using MeterReadingsApi.Validators;
 using Moq;
 using System.Diagnostics.CodeAnalysis;
-using Xunit;
 
 namespace MeterReadingsApi.UnitTests
 {

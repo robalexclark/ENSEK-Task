@@ -1,9 +1,5 @@
-using FluentValidation;
+﻿using FluentValidation;
 using MeterReadingsApi.Models;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Linq;
-using System;
 
 namespace MeterReadingsApi.Validators
 {

@@ -21,6 +21,7 @@ namespace MeterReadingsApi.Repositories
         {
             return context.MeterReadings
                 .Where(r => r.AccountId == accountId)
+                .OrderBy(r => r.MeterReadingDateTime)
                 .AsNoTracking()
                 .ToList();
         }

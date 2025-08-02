@@ -1,10 +1,9 @@
-using CsvHelper;
+﻿using CsvHelper;
 using CsvHelper.Configuration;
 using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.Interfaces;
 using System.Globalization;
 using System.Text;
-using System.IO;
 
 namespace MeterReadingsApi.Services
 {
@@ -17,6 +16,7 @@ namespace MeterReadingsApi.Services
             {
                 MissingFieldFound = null,
             };
+
             using CsvReader csv = new CsvReader(reader, config);
             csv.Context.RegisterClassMap<MeterReadingCsvMap>();
 

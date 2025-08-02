@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace MeterReadingsApi.Interfaces
+﻿namespace MeterReadingsApi.Interfaces
 {
     public interface IMeterReadingUploadService
     {
