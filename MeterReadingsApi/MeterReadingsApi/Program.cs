@@ -28,6 +28,7 @@ namespace MeterReadingsApi
             builder.Services.AddSingleton<ICSVService, CsvService>();
             builder.Services.AddScoped<IMeterReadingUploadService, MeterReadingUploadService>();
             builder.Services.AddTransient<IValidator<MeterReadingCsvRecord>, MeterReadingCsvRecordValidator>();
+            builder.Services.AddTransient<IValidator<int>, AccountIdValidator>();
 
             WebApplication app = builder.Build();
 

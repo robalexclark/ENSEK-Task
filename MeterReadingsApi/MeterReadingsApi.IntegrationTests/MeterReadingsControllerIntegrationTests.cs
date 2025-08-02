@@ -106,4 +106,14 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         // Assert
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
+
+    [Fact]
+    public async Task GetByAccountId_ReturnsNotFound_When_AccountMissing()
+    {
+        // Act
+        HttpResponseMessage response = await client.GetAsync("/accounts/9999/meter-readings");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
 }
