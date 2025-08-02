@@ -6,6 +6,7 @@ using MeterReadingsApi.DataModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -139,6 +140,23 @@ namespace MeterReadingsApi.UnitTests
             IEnumerable<MeterReading> readings = Assert.IsAssignableFrom<IEnumerable<MeterReading>>(ok.Value);
             Assert.Single(readings);
             Assert.Equal(reading, readings.First());
+        }
+
+        [Fact]
+        public void GetByAccountId_Returns_NoContent_When_No_Readings()
+        {
+            // Arrange
+            Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
+            Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
+            repo.Setup(r => r.AccountExists(1)).Returns(true);
+            repo.Setup(r => r.GetMeterReadingsByAccountId(1)).Returns(Array.Empty<MeterReading>());
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object);
+
+            // Act
+            ActionResult result = controller.GetByAccountId(1);
+
+            // Assert
+            Assert.IsType<NoContentResult>(result);
         }
 
         [Fact]

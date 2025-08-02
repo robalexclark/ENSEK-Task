@@ -32,7 +32,7 @@ namespace MeterReadingsApi.Controllers
 
             if (!readings.Any())
             {
-                return NotFound();
+                return NoContent();
             }
 
             return Ok(readings);

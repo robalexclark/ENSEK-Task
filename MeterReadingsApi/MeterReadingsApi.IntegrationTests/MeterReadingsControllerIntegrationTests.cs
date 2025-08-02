@@ -94,6 +94,16 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
         Assert.NotEmpty(readings);
         MeterReading reading = readings.First();
         Assert.Equal(2344, reading.AccountId);
-        Assert.Equal(123, reading.MeterReadValue);
+       Assert.Equal(123, reading.MeterReadValue);
+    }
+
+    [Fact]
+    public async Task GetByAccountId_ReturnsNoContent_When_NoReadings()
+    {
+        // Act
+        HttpResponseMessage response = await client.GetAsync("/accounts/2352/meter-readings");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 }
