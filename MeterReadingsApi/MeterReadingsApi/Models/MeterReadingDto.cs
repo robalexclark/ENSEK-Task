@@ -1,4 +1,4 @@
-namespace MeterReadingsApi.Models
+﻿namespace MeterReadingsApi.Models
 {
     public class MeterReadingDto
     {
@@ -7,4 +7,3 @@ namespace MeterReadingsApi.Models
         public int MeterReadValue { get; set; }
     }
 }
-

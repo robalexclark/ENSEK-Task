@@ -5,6 +5,8 @@
 
 <Row>
     <Column ColumnSize="ColumnSize.Is6">
+        <h2>Accounts</h2>
+        <br />
         <DataGrid TItem="AccountDto"
                   Data="@accounts"
                   SelectionMode="DataGridSelectionMode.Single"
@@ -15,6 +17,8 @@
         </DataGrid>
     </Column>
     <Column ColumnSize="ColumnSize.Is6">
+        <h2>Meter Readings</h2>
+        <br />
         <DataGrid TItem="MeterReadingDto" Data="@meterReadings" Striped Bordered Virtualize VirtualizeOptions="@(new VirtualizeOptions() { DataGridHeight = "1200px", DataGridMaxHeight = "1200px" })">
             <DataGridColumn TItem="MeterReadingDto" Field="@nameof(MeterReadingDto.MeterReadingDateTime)" Caption="Reading Date/Time">
                 <DisplayTemplate>
@@ -24,31 +28,14 @@
                     }
                 </DisplayTemplate>
             </DataGridColumn>
-            <DataGridColumn TItem="MeterReadingDto" Field="@nameof(MeterReadingDto.MeterReadValue)" Caption="Value" />
+            <DataGridColumn TItem="MeterReadingDto" Field="@nameof(MeterReadingDto.MeterReadValue)" Caption="Value">
+                <DisplayTemplate>
+                    @{
+                        int meterReadValue = (context as MeterReadingDto).MeterReadValue;
+                        @meterReadValue.ToString("00000")
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
         </DataGrid>
     </Column>
 </Row>
-
-@code {
-    private IList<AccountDto>? accounts;
-    private IList<MeterReadingDto>? meterReadings;
-
-    protected override async Task OnInitializedAsync()
-    {
-        accounts = await Http.GetFromJsonAsync<IList<AccountDto>>("accounts");
-    }
-
-    private async Task OnAccountSelected(AccountDto account)
-    {
-        var response = await Http.GetAsync($"accounts/{account.AccountId}/meter-readings");
-        if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
-        {
-            meterReadings = Array.Empty<MeterReadingDto>();
-        }
-        else
-        {
-            response.EnsureSuccessStatusCode();
-            meterReadings = await response.Content.ReadFromJsonAsync<IList<MeterReadingDto>>();
-        }
-    }
-}
