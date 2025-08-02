@@ -27,6 +27,7 @@ namespace MeterReadingsApi.UnitTests
         [Fact]
         public void Valid_record_passes_validation()
         {
+            // Arrange
             FakeRepository repo = new FakeRepository();
             MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
             MeterReadingCsvRecord record = new MeterReadingCsvRecord
@@ -36,13 +37,17 @@ namespace MeterReadingsApi.UnitTests
                 MeterReadValue = "01234"
             };
 
+            // Act
             ValidationResult result = validator.Validate(record);
+
+            // Assert
             Assert.True(result.IsValid);
         }
 
         [Fact]
         public void Invalid_meter_read_value_fails_validation()
         {
+            // Arrange
             FakeRepository repo = new FakeRepository();
             MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
             MeterReadingCsvRecord record = new MeterReadingCsvRecord
@@ -52,13 +57,17 @@ namespace MeterReadingsApi.UnitTests
                 MeterReadValue = "1234" // only 4 digits
             };
 
+            // Act
             ValidationResult result = validator.Validate(record);
+
+            // Assert
             Assert.False(result.IsValid);
         }
 
         [Fact]
         public void Duplicate_reading_fails_validation()
         {
+            // Arrange
             FakeRepository repo = new FakeRepository { ReadingExistsReturn = true };
             MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
             MeterReadingCsvRecord record = new MeterReadingCsvRecord
@@ -68,13 +77,17 @@ namespace MeterReadingsApi.UnitTests
                 MeterReadValue = "12345"
             };
 
+            // Act
             ValidationResult result = validator.Validate(record);
+
+            // Assert
             Assert.False(result.IsValid);
         }
 
         [Fact]
         public void Older_reading_fails_validation()
         {
+            // Arrange
             FakeRepository repo = new FakeRepository { HasNewerReadingReturn = true };
             MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
             MeterReadingCsvRecord record = new MeterReadingCsvRecord
@@ -84,13 +97,17 @@ namespace MeterReadingsApi.UnitTests
                 MeterReadValue = "12345"
             };
 
+            // Act
             ValidationResult result = validator.Validate(record);
+
+            // Assert
             Assert.False(result.IsValid);
         }
 
         [Fact]
         public void Unknown_account_fails_validation()
         {
+            // Arrange
             FakeRepository repo = new FakeRepository { AccountExistsReturn = false };
             MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
             MeterReadingCsvRecord record = new MeterReadingCsvRecord
@@ -100,7 +117,10 @@ namespace MeterReadingsApi.UnitTests
                 MeterReadValue = "12345"
             };
 
+            // Act
             ValidationResult result = validator.Validate(record);
+
+            // Assert
             Assert.False(result.IsValid);
         }
     }

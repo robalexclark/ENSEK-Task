@@ -21,6 +21,7 @@ namespace MeterReadingsApi.UnitTests
         [Fact]
         public async Task AddMeterReadingsAsync_PersistsReadings()
         {
+            // Arrange
             MeterReadingsRepository repo = CreateRepository();
             repo.EnsureSeedData();
             MeterReading reading = new MeterReading
@@ -30,14 +31,17 @@ namespace MeterReadingsApi.UnitTests
                 MeterReadValue = 100
             };
 
+            // Act
             await repo.AddMeterReadingsAsync(new[] { reading });
 
+            // Assert
             Assert.True(repo.ReadingExists(reading.AccountId, reading.MeterReadingDateTime));
         }
 
         [Fact]
         public async Task QueryMethods_ReturnExpectedResults()
         {
+            // Arrange
             MeterReadingsRepository repo = CreateRepository();
             repo.EnsureSeedData();
             Account account = repo.GetAccounts().First();
@@ -47,8 +51,11 @@ namespace MeterReadingsApi.UnitTests
                 MeterReadingDateTime = new DateTime(2024,1,1),
                 MeterReadValue = 200
             };
+
+            // Act
             await repo.AddMeterReadingsAsync(new[] { reading });
 
+            // Assert
             Assert.True(repo.AccountExists(account.AccountId));
             Assert.False(repo.AccountExists(999));
             Assert.True(repo.ReadingExists(account.AccountId, reading.MeterReadingDateTime));
