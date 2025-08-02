@@ -20,7 +20,7 @@ namespace MeterReadingsApi
             // Services
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
-            builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddAutoMapper(cfg => { }, typeof(Program).Assembly);
 
             string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=meterreadings.db";
             builder.Services.AddDbContext<MeterReadingsContext>(options => options.UseSqlite(connectionString));
