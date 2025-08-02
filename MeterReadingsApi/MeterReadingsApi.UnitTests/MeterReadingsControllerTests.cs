@@ -24,40 +24,21 @@ namespace MeterReadingsApi.UnitTests
         }
 
         [Fact]
-        public async Task MeterReadingUploads_Returns_BadRequest_When_File_Is_Null()
+        public async Task MeterReadingUploads_Returns_BadRequest_When_File_Invalid()
         {
             // Arrange
             Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
             Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object);
+            Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
+            fileValidator.Setup(v => v.Validate(It.IsAny<MeterReadingUploadRequest>())).Returns(new ValidationResult(new[] { new ValidationFailure("File", "error") }));
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
 
             // Act
-            ActionResult result = await controller.MeterReadingUploads(null);
+            ActionResult result = await controller.MeterReadingUploads(new MeterReadingUploadRequest());
 
             // Assert
-            BadRequestObjectResult badRequest = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal("File is null or empty.", badRequest.Value);
-            service.Verify(s => s.UploadAsync(It.IsAny<IFormFile>()), Times.Never);
-        }
-
-        [Fact]
-        public async Task MeterReadingUploads_Returns_BadRequest_When_File_Is_Empty()
-        {
-            // Arrange
-            Mock<IMeterReadingUploadService> service = new Mock<IMeterReadingUploadService>();
-            Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
-            Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object);
-            Mock<IFormFile> file = new Mock<IFormFile>();
-            file.Setup(f => f.Length).Returns(0);
-
-            // Act
-            ActionResult result = await controller.MeterReadingUploads(file.Object);
-
-            // Assert
-            BadRequestObjectResult badRequest = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal("File is null or empty.", badRequest.Value);
+            Assert.IsType<BadRequestObjectResult>(result);
             service.Verify(s => s.UploadAsync(It.IsAny<IFormFile>()), Times.Never);
         }
 
@@ -71,11 +52,13 @@ namespace MeterReadingsApi.UnitTests
             service.Setup(s => s.UploadAsync(It.IsAny<IFormFile>())).ReturnsAsync(uploadResult);
 
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object);
+            Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
+            fileValidator.Setup(v => v.Validate(It.IsAny<MeterReadingUploadRequest>())).Returns(new ValidationResult());
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
             IFormFile file = CreateFile();
 
             // Act
-            ActionResult result = await controller.MeterReadingUploads(file);
+            ActionResult result = await controller.MeterReadingUploads(new MeterReadingUploadRequest { File = file });
 
             // Assert
             CreatedResult created = Assert.IsType<CreatedResult>(result);
@@ -93,11 +76,13 @@ namespace MeterReadingsApi.UnitTests
             service.Setup(s => s.UploadAsync(It.IsAny<IFormFile>())).ReturnsAsync(uploadResult);
 
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object);
+            Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
+            fileValidator.Setup(v => v.Validate(It.IsAny<MeterReadingUploadRequest>())).Returns(new ValidationResult());
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
             IFormFile file = CreateFile();
 
             // Act
-            ActionResult result = await controller.MeterReadingUploads(file);
+            ActionResult result = await controller.MeterReadingUploads(new MeterReadingUploadRequest { File = file });
 
             // Assert
             ObjectResult objectResult = Assert.IsType<ObjectResult>(result);
@@ -116,11 +101,13 @@ namespace MeterReadingsApi.UnitTests
             service.Setup(s => s.UploadAsync(It.IsAny<IFormFile>())).ReturnsAsync(uploadResult);
 
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object);
+            Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
+            fileValidator.Setup(v => v.Validate(It.IsAny<MeterReadingUploadRequest>())).Returns(new ValidationResult());
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
             IFormFile file = CreateFile();
 
             // Act
-            ActionResult result = await controller.MeterReadingUploads(file);
+            ActionResult result = await controller.MeterReadingUploads(new MeterReadingUploadRequest { File = file });
 
             // Assert
             UnprocessableEntityObjectResult unprocessable = Assert.IsType<UnprocessableEntityObjectResult>(result);
@@ -138,7 +125,8 @@ namespace MeterReadingsApi.UnitTests
             repo.Setup(r => r.GetMeterReadingsByAccountId(1)).Returns(new[] { reading });
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
             validator.Setup(v => v.Validate(1)).Returns(new ValidationResult());
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object);
+            Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
 
             // Act
             ActionResult result = controller.GetByAccountId(1);
@@ -159,7 +147,8 @@ namespace MeterReadingsApi.UnitTests
             repo.Setup(r => r.GetMeterReadingsByAccountId(1)).Returns(Array.Empty<MeterReading>());
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
             validator.Setup(v => v.Validate(1)).Returns(new ValidationResult());
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object);
+            Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
 
             // Act
             ActionResult result = controller.GetByAccountId(1);
@@ -176,7 +165,8 @@ namespace MeterReadingsApi.UnitTests
             Mock<IMeterReadingsRepository> repo = new Mock<IMeterReadingsRepository>();
             Mock<IValidator<int>> validator = new Mock<IValidator<int>>();
             validator.Setup(v => v.Validate(1)).Returns(new ValidationResult(new[] { new ValidationFailure("AccountId", "error") }));
-            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object);
+            Mock<IValidator<MeterReadingUploadRequest>> fileValidator = new Mock<IValidator<MeterReadingUploadRequest>>();
+            MeterReadingsController controller = new MeterReadingsController(service.Object, repo.Object, validator.Object, fileValidator.Object);
 
             // Act
             ActionResult result = controller.GetByAccountId(1);

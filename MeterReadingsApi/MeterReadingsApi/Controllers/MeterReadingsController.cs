@@ -15,12 +15,14 @@ namespace MeterReadingsApi.Controllers
         private readonly IMeterReadingUploadService uploadService;
         private readonly IMeterReadingsRepository repository;
         private readonly IValidator<int> accountIdValidator;
+        private readonly IValidator<MeterReadingUploadRequest> fileValidator;
 
-        public MeterReadingsController(IMeterReadingUploadService uploadService, IMeterReadingsRepository repository, IValidator<int> accountIdValidator)
+        public MeterReadingsController(IMeterReadingUploadService uploadService, IMeterReadingsRepository repository, IValidator<int> accountIdValidator, IValidator<MeterReadingUploadRequest> fileValidator)
         {
             this.uploadService = uploadService;
             this.repository = repository;
             this.accountIdValidator = accountIdValidator;
+            this.fileValidator = fileValidator;
         }
 
         [Route("~/accounts/{accountId}/meter-readings")]
@@ -45,12 +47,13 @@ namespace MeterReadingsApi.Controllers
 
         [Route("meter-reading-uploads")]
         [HttpPost]
-        public async Task<ActionResult> MeterReadingUploads([FromForm] IFormFile? file)
+        public async Task<ActionResult> MeterReadingUploads([FromForm] MeterReadingUploadRequest request)
         {
-            if (file == null || file.Length == 0)
-                return BadRequest("File is null or empty.");
+            ValidationResult validation = fileValidator.Validate(request);
+            if (!validation.IsValid)
+                return BadRequest(validation.Errors.Select(e => e.ErrorMessage));
 
-            MeterReadingUploadResult result = await uploadService.UploadAsync(file);
+            MeterReadingUploadResult result = await uploadService.UploadAsync(request.File!);
 
             return result switch
             {
