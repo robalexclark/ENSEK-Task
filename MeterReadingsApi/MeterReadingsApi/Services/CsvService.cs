@@ -1,4 +1,5 @@
 using CsvHelper;
+using CsvHelper.Configuration;
 using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.Interfaces;
 using System.Globalization;
@@ -12,9 +13,12 @@ namespace MeterReadingsApi.Services
         public async Task<IEnumerable<MeterReadingCsvRecord>> ReadMeterReadingsAsync(Stream stream)
         {
             using StreamReader reader = new StreamReader(stream, Encoding.UTF8, leaveOpen: true);
-            using CsvReader csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+            CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                MissingFieldFound = null,
+            };
+            using CsvReader csv = new CsvReader(reader, config);
             csv.Context.RegisterClassMap<MeterReadingCsvMap>();
-            csv.Context.Configuration.MissingFieldFound = null;
 
             List<MeterReadingCsvRecord> records = new List<MeterReadingCsvRecord>();
 
