@@ -8,6 +8,8 @@ namespace MeterReadingsApi.Validators
     {
         public MeterReadingCsvRecordValidator(IMeterReadingsRepository repository)
         {
+            RuleLevelCascadeMode = CascadeMode.Stop;
+
             RuleFor(r => r.AccountId)
                 .Must(repository.AccountExists)
                 .WithMessage("Account does not exist");
