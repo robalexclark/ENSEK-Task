@@ -74,6 +74,27 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
     }
 
     [Fact]
+    public async Task Upload_FileWithUnknownAccount_IgnoresReading()
+    {
+        // Arrange
+        string csv = "AccountId,MeterReadingDateTime,MeterReadValue\n" +
+                     "4534,19/05/2019 09:24,00123\n" +
+                     "9999,17/05/2019 12:00,00456\n";
+
+        using HttpContent content = CreateCsvContent(csv);
+
+        // Act
+        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
+        string body = await response.Content.ReadAsStringAsync();
+        MeterReadingUploadResult result = JsonSerializer.Deserialize<MeterReadingUploadResult>(body)!;
+
+        // Assert
+        Assert.Equal((HttpStatusCode)207, response.StatusCode);
+        Assert.Equal(1, result.Successful);
+        Assert.Equal(1, result.Failed);
+    }
+
+    [Fact]
     public async Task GetByAccountId_ReturnsReadings()
     {
         // Arrange - upload a reading first
