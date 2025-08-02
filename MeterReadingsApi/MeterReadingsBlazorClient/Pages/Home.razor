@@ -1,0 +1,45 @@
+﻿@page "/"
+@inject HttpClient Http
+
+<PageTitle>Accounts</PageTitle>
+
+<Row>
+    <Column ColumnSize="ColumnSize.Is6">
+        <DataGrid TItem="AccountDto"
+                  Data="@accounts"
+                  SelectionMode="DataGridSelectionMode.Single"
+                  SelectedRowChanged="OnAccountSelected" Striped Bordered>
+            <DataGridColumn TItem="AccountDto" Field="@nameof(AccountDto.AccountId)" Caption="Account ID" />
+            <DataGridColumn TItem="AccountDto" Field="@nameof(AccountDto.FirstName)" Caption="First Name" />
+            <DataGridColumn TItem="AccountDto" Field="@nameof(AccountDto.LastName)" Caption="Last Name" />
+        </DataGrid>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is6">
+        <DataGrid TItem="MeterReadingDto" Data="@meterReadings" Striped Bordered>
+            <DataGridColumn TItem="MeterReadingDto" Field="@nameof(MeterReadingDto.MeterReadingDateTime)" Caption="Reading Date/Time">
+                <DisplayTemplate>
+                    @{
+                        DateTime meterReadingDateTime = (context as MeterReadingDto).MeterReadingDateTime;
+                        @meterReadingDateTime.ToString("ddMMMyy HH:mm")
+                    }
+                </DisplayTemplate>
+            </DataGridColumn>
+            <DataGridColumn TItem="MeterReadingDto" Field="@nameof(MeterReadingDto.MeterReadValue)" Caption="Value" />
+        </DataGrid>
+    </Column>
+</Row>
+
+@code {
+    private IList<AccountDto>? accounts;
+    private IList<MeterReadingDto>? meterReadings;
+
+    protected override async Task OnInitializedAsync()
+    {
+        accounts = await Http.GetFromJsonAsync<IList<AccountDto>>("accounts");
+    }
+
+    private async Task OnAccountSelected(AccountDto account)
+    {
+        meterReadings = await Http.GetFromJsonAsync<IList<MeterReadingDto>>($"accounts/{account.AccountId}/meter-readings");
+    }
+}

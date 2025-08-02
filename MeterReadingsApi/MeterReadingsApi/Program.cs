@@ -32,6 +32,13 @@ namespace MeterReadingsApi
             builder.Services.AddTransient<IValidator<int>, AccountIdValidator>();
             builder.Services.AddTransient<IValidator<MeterReadingUploadRequest>, MeterReadingUploadRequestValidator>();
 
+            builder.Services.AddCors(o => o.AddDefaultPolicy(p =>
+                //p.WithOrigins("https://localhost:7242",
+                //              "https://localhost:5173")
+                p.AllowAnyOrigin()
+                 .AllowAnyHeader()
+                 .AllowAnyMethod()));
+
             WebApplication app = builder.Build();
 
             using (IServiceScope scope = app.Services.CreateScope())
@@ -49,6 +56,7 @@ namespace MeterReadingsApi
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
+            app.UseCors();
             app.MapControllers();
 
             app.Run();
