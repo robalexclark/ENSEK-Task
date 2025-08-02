@@ -5,12 +5,15 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics.CodeAnalysis;
+using System;
 
 namespace MeterReadingsApi.IntegrationTests;
 
 [ExcludeFromCodeCoverage]
 public class TestApiFactory : WebApplicationFactory<Program>
 {
+    private readonly string dbName = Guid.NewGuid().ToString();
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -22,7 +25,7 @@ public class TestApiFactory : WebApplicationFactory<Program>
             }
 
             services.AddDbContext<MeterReadingsContext>(options =>
-                options.UseInMemoryDatabase("TestDb"));
+                options.UseInMemoryDatabase(dbName));
 
             // Build provider to seed data
             ServiceProvider sp = services.BuildServiceProvider();
