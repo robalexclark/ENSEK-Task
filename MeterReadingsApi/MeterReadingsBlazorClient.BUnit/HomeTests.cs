@@ -48,7 +48,11 @@ public partial class HomeTests : BlazoriseTestBase
         {
             if (req.RequestUri?.AbsolutePath == "/accounts")
             {
-                AccountDto[] accounts = new[] { new AccountDto { AccountId = 1, FirstName = "Jane", LastName = "Doe" } };
+                AccountDto[] accounts =
+                {
+                    new AccountDto { AccountId = 1, FirstName = "Jane", LastName = "Doe" },
+                    new AccountDto { AccountId = 2, FirstName = "John", LastName = "Smith" }
+                };
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
                     Content = JsonContent.Create(accounts)
@@ -65,23 +69,46 @@ public partial class HomeTests : BlazoriseTestBase
                     Content = JsonContent.Create(readings)
                 };
             }
+            if (req.RequestUri?.AbsolutePath == "/accounts/2/meter-readings")
+            {
+                MeterReadingDto[] readings =
+                {
+                    new MeterReadingDto { AccountId = 2, MeterReadingDateTime = new DateTime(2024,5,6,7,8,9), MeterReadValue = 54321 }
+                };
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = JsonContent.Create(readings)
+                };
+            }
             return new HttpResponseMessage(HttpStatusCode.NotFound);
         });
         HttpClient client = new(handler) { BaseAddress = new Uri("http://localhost") };
         Services.AddSingleton(client);
         IRenderedComponent<Home> cut = RenderComponent<Home>();
 
-        // Act
-        await cut.InvokeAsync(() => cut.Find("tbody tr").Click());
-
-        // Assert
         FieldInfo? meterReadingsField = typeof(Home).GetField("meterReadings", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        // Act & Assert for first account
+        await cut.InvokeAsync(() => cut.FindAll("tbody tr")[0].Click());
+        int firstValue = 0;
         cut.WaitForAssertion(() =>
         {
             IList<MeterReadingDto>? readings = meterReadingsField?.GetValue(cut.Instance) as IList<MeterReadingDto>;
             Assert.NotNull(readings);
             Assert.Single(readings!);
-            Assert.Equal(12345, readings![0].MeterReadValue);
+            firstValue = readings![0].MeterReadValue;
+            Assert.Equal(12345, firstValue);
+        });
+
+        // Act & Assert for second account
+        await cut.InvokeAsync(() => cut.FindAll("tbody tr")[1].Click());
+        cut.WaitForAssertion(() =>
+        {
+            IList<MeterReadingDto>? readings = meterReadingsField?.GetValue(cut.Instance) as IList<MeterReadingDto>;
+            Assert.NotNull(readings);
+            Assert.Single(readings!);
+            Assert.NotEqual(firstValue, readings![0].MeterReadValue);
+            Assert.Equal(54321, readings![0].MeterReadValue);
         });
     }
 }
