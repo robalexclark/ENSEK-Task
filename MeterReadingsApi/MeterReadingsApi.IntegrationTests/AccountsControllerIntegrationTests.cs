@@ -1,4 +1,4 @@
-﻿using MeterReadingsApi.DataModel;
+using MeterReadingsApi.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using Xunit;
@@ -18,13 +18,26 @@ public class AccountsControllerIntegrationTests : IClassFixture<TestApiFactory>
     [Fact]
     public async Task Get_ReturnsAccounts()
     {
-        // Act
         HttpResponseMessage response = await client.GetAsync("/accounts");
         response.EnsureSuccessStatusCode();
         string body = await response.Content.ReadAsStringAsync();
-        List<Account> accounts = JsonSerializer.Deserialize<List<Account>>(body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+        List<AccountDto> accounts = JsonSerializer.Deserialize<List<AccountDto>>(body, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
 
-        // Assert
         Assert.NotEmpty(accounts);
     }
+
+    [Fact]
+    public async Task Get_DoesNotReturnMeterReadings()
+    {
+        HttpResponseMessage response = await client.GetAsync("/accounts");
+        response.EnsureSuccessStatusCode();
+        string body = await response.Content.ReadAsStringAsync();
+
+        using JsonDocument doc = JsonDocument.Parse(body);
+        foreach (JsonElement account in doc.RootElement.EnumerateArray())
+        {
+            Assert.False(account.TryGetProperty("meterReadings", out _));
+        }
+    }
 }
+

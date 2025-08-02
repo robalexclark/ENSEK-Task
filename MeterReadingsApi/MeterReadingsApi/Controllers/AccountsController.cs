@@ -1,4 +1,6 @@
-﻿using MeterReadingsApi.DataModel;
+using AutoMapper;
+using MeterReadingsApi.DataModel;
+using MeterReadingsApi.Models;
 using MeterReadingsApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,12 @@ namespace MeterReadingsApi.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IMeterReadingsRepository repository;
+        private readonly IMapper mapper;
 
-        public AccountsController(IMeterReadingsRepository repository)
+        public AccountsController(IMeterReadingsRepository repository, IMapper mapper)
         {
             this.repository = repository;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -25,7 +29,9 @@ namespace MeterReadingsApi.Controllers
                 return NoContent();
             }
 
-            return Ok(accounts);
+            IEnumerable<AccountDto> result = mapper.Map<IEnumerable<AccountDto>>(accounts);
+            return Ok(result);
         }
     }
 }
+
