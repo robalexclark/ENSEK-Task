@@ -1,11 +1,10 @@
-using AutoMapper;
+﻿using AutoMapper;
 using MeterReadingsApi.Controllers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Models;
 using MeterReadingsApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Xunit;
 using System.Diagnostics.CodeAnalysis;
 
 namespace MeterReadingsApi.UnitTests

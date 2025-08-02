@@ -1,15 +1,14 @@
-using AutoMapper;
+﻿using AutoMapper;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Models;
 
-namespace MeterReadingsApi.Profiles
+namespace MeterReadingsApi.Mappers
 {
-    public class AccountProfile : Profile
+    public class AccountMapper : Profile
     {
-        public AccountProfile()
+        public AccountMapper()
         {
             CreateMap<Account, AccountDto>();
         }
     }
 }
-

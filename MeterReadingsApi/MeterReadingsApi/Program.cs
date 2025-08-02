@@ -1,5 +1,4 @@
-using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
@@ -56,4 +55,3 @@ namespace MeterReadingsApi
         }
     }
 }
-
