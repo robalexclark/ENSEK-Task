@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using MeterReadingsApi;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Repositories;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace MeterReadingsApi.IntegrationTests;
 
+[ExcludeFromCodeCoverage]
 public class TestApiFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)

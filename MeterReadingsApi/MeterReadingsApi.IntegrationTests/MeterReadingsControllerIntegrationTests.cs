@@ -3,11 +3,13 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Diagnostics.CodeAnalysis;
 using MeterReadingsApi.Models;
 using Xunit;
 
 namespace MeterReadingsApi.IntegrationTests;
 
+[ExcludeFromCodeCoverage]
 public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFactory>
 {
     private readonly HttpClient client;

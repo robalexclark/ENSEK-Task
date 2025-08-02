@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 using Xunit;
 
 namespace MeterReadingsApi.UnitTests
 {
+    [ExcludeFromCodeCoverage]
     public class MeterReadingsRepositoryTests
     {
         private static MeterReadingsRepository CreateRepository()

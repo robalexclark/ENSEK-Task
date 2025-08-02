@@ -1,5 +1,6 @@
 using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.Services;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Xunit;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MeterReadingsApi.UnitTests
 {
+    [ExcludeFromCodeCoverage]
     public class CsvServiceTests
     {
         [Fact]
