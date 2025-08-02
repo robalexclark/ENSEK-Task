@@ -5,9 +5,11 @@ using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Repositories;
 using MeterReadingsApi.Services;
+using MeterReadingsApi.Models;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 
 namespace MeterReadingsApi.UnitTests
 {
@@ -16,8 +18,8 @@ namespace MeterReadingsApi.UnitTests
     {
         private static Mock<IFormFile> CreateFile()
         {
-            var stream = new MemoryStream(new byte[] {1});
-            var mock = new Mock<IFormFile>();
+            MemoryStream stream = new MemoryStream(new byte[] {1});
+            Mock<IFormFile> mock = new Mock<IFormFile>();
             mock.Setup(f => f.OpenReadStream()).Returns(stream);
             mock.Setup(f => f.Length).Returns(stream.Length);
 
@@ -31,25 +33,25 @@ namespace MeterReadingsApi.UnitTests
         public async Task UploadAsync_Adds_valid_readings_and_returns_counts()
         {
             // arrange
-            var records = new[]
+            MeterReadingCsvRecord[] records = new[]
             {
                 new MeterReadingCsvRecord { AccountId = 1, MeterReadingDateTime = DateTime.UtcNow, MeterReadValue = "12345" },
                 new MeterReadingCsvRecord { AccountId = 2, MeterReadingDateTime = DateTime.UtcNow, MeterReadValue = "54321" }
             };
 
-            var csvService = new Mock<ICSVService>();
+            Mock<ICSVService> csvService = new Mock<ICSVService>();
             csvService.Setup(s => s.ReadMeterReadingsAsync(It.IsAny<Stream>())).ReturnsAsync(records);
 
-            var repository = new Mock<IMeterReadingsRepository>();
-            var validator = new Mock<IValidator<MeterReadingCsvRecord>>();
+            Mock<IMeterReadingsRepository> repository = new Mock<IMeterReadingsRepository>();
+            Mock<IValidator<MeterReadingCsvRecord>> validator = new Mock<IValidator<MeterReadingCsvRecord>>();
             validator.Setup(v => v.Validate(It.IsAny<MeterReadingCsvRecord>())).Returns(Valid());
 
-            var service = new MeterReadingUploadService(csvService.Object, repository.Object, validator.Object);
+            MeterReadingUploadService service = new MeterReadingUploadService(csvService.Object, repository.Object, validator.Object);
 
-            var file = CreateFile();
+            Mock<IFormFile> file = CreateFile();
 
             // act
-            var result = await service.UploadAsync(file.Object);
+            MeterReadingUploadResult result = await service.UploadAsync(file.Object);
 
             // assert
             repository.Verify(r => r.AddMeterReadingsAsync(It.Is<IEnumerable<MeterReading>>(l => l != null && l.Count() == 2)), Times.Once);
@@ -61,27 +63,27 @@ namespace MeterReadingsApi.UnitTests
         public async Task UploadAsync_Handles_invalid_records()
         {
             // arrange
-            var records = new[]
+            MeterReadingCsvRecord[] records = new[]
             {
                 new MeterReadingCsvRecord { AccountId = 1, MeterReadingDateTime = DateTime.UtcNow, MeterReadValue = "12345" },
                 new MeterReadingCsvRecord { AccountId = 2, MeterReadingDateTime = DateTime.UtcNow, MeterReadValue = "99999" }
             };
 
-            var csvService = new Mock<ICSVService>();
+            Mock<ICSVService> csvService = new Mock<ICSVService>();
             csvService.Setup(s => s.ReadMeterReadingsAsync(It.IsAny<Stream>())).ReturnsAsync(records);
 
-            var repository = new Mock<IMeterReadingsRepository>();
-            var validator = new Mock<IValidator<MeterReadingCsvRecord>>();
+            Mock<IMeterReadingsRepository> repository = new Mock<IMeterReadingsRepository>();
+            Mock<IValidator<MeterReadingCsvRecord>> validator = new Mock<IValidator<MeterReadingCsvRecord>>();
             validator.SetupSequence(v => v.Validate(It.IsAny<MeterReadingCsvRecord>()))
                 .Returns(Valid())
                 .Returns(Invalid());
 
-            var service = new MeterReadingUploadService(csvService.Object, repository.Object, validator.Object);
+            MeterReadingUploadService service = new MeterReadingUploadService(csvService.Object, repository.Object, validator.Object);
 
-            var file = CreateFile();
+            Mock<IFormFile> file = CreateFile();
 
             // act
-            var result = await service.UploadAsync(file.Object);
+            MeterReadingUploadResult result = await service.UploadAsync(file.Object);
 
             // assert
             repository.Verify(r => r.AddMeterReadingsAsync(It.Is<IEnumerable<MeterReading>>(l => l.Count() == 1)), Times.Once);

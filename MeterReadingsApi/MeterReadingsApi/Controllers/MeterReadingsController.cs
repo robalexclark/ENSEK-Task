@@ -1,6 +1,7 @@
 ﻿namespace MeterReadingsApi.Controllers
 {
     using MeterReadingsApi.Interfaces;
+    using MeterReadingsApi.Models;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +30,7 @@
             if (file == null || file.Length == 0)
                 return BadRequest("File is null or empty.");
 
-            var result = await uploadService.UploadAsync(file);
+            MeterReadingUploadResult result = await uploadService.UploadAsync(file);
 
             return result switch
             {

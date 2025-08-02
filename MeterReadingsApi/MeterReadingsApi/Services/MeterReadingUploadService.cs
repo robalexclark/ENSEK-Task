@@ -1,8 +1,10 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Repositories;
+using System.IO;
 
 namespace MeterReadingsApi.Services
 {
@@ -21,16 +23,16 @@ namespace MeterReadingsApi.Services
 
         public async Task<Models.MeterReadingUploadResult> UploadAsync(IFormFile file)
         {
-            using var stream = file.OpenReadStream();
-            var records = await csvService.ReadMeterReadingsAsync(stream);
+            using Stream stream = file.OpenReadStream();
+            IEnumerable<MeterReadingCsvRecord> records = await csvService.ReadMeterReadingsAsync(stream);
 
-            var validReadings = new List<MeterReading>();
+            List<MeterReading> validReadings = new List<MeterReading>();
             int success = 0;
             int failed = 0;
 
-            foreach (var record in records)
+            foreach (MeterReadingCsvRecord record in records)
             {
-                var result = validator.Validate(record);
+                ValidationResult result = validator.Validate(record);
                 if (!result.IsValid)
                 {
                     failed++;
