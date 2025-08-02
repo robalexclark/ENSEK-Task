@@ -57,5 +57,26 @@ namespace MeterReadingsApi.UnitTests
             Assert.Equal("1234", list[0].AccountId);
             Assert.Equal("5678", list[1].AccountId);
         }
+
+        [Fact]
+        public async Task ReadMeterReadingsAsync_IgnoresMissingFields()
+        {
+            // Arrange
+            string csv = "AccountId,MeterReadingDateTime,MeterReadValue\n" +
+                         "26/05/2019 09:24,03467\n"; // Missing AccountId value
+
+            await using MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(csv));
+            CsvService service = new CsvService();
+
+            // Act
+            IEnumerable<MeterReadingCsvRecord> result = await service.ReadMeterReadingsAsync(stream);
+            List<MeterReadingCsvRecord> list = result.ToList();
+
+            // Assert
+            Assert.Single(list);
+            Assert.Equal("26/05/2019 09:24", list[0].AccountId);
+            Assert.Equal("03467", list[0].MeterReadingDateTime);
+            Assert.Equal(string.Empty, list[0].MeterReadValue);
+        }
     }
 }
