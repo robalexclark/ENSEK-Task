@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Diagnostics.CodeAnalysis;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
 using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.DataModel;
@@ -13,7 +7,7 @@ using MeterReadingsApi.Repositories;
 using MeterReadingsApi.Services;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using Xunit;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MeterReadingsApi.UnitTests
 {
@@ -26,6 +20,7 @@ namespace MeterReadingsApi.UnitTests
             var mock = new Mock<IFormFile>();
             mock.Setup(f => f.OpenReadStream()).Returns(stream);
             mock.Setup(f => f.Length).Returns(stream.Length);
+
             return mock;
         }
 

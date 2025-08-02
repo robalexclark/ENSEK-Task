@@ -19,7 +19,7 @@ namespace MeterReadingsApi.Validators
 
             RuleFor(r => r)
                 .Must(r => !repository.ReadingExists(r.AccountId, r.MeterReadingDateTime))
-                .WithMessage("Reading already exists for this account and date");
+                .WithMessage("Reading already exists for this account and date/time");
 
             RuleFor(r => r)
                 .Must(r => !repository.HasNewerReading(r.AccountId, r.MeterReadingDateTime))

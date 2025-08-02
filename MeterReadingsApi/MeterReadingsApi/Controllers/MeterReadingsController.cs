@@ -1,24 +1,18 @@
 ﻿namespace MeterReadingsApi.Controllers
 {
     using MeterReadingsApi.Interfaces;
-    using MeterReadingsApi.Repositories;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Configuration;
 
     [Route("api/meter-readings")]
-    [ApiController]                       // automatic 400s on model-binding errors
+    [ApiController] // automatic 400s on model-binding errors
     public class MeterReadingsController : ControllerBase
     {
         private readonly IMeterReadingUploadService uploadService;
-        private readonly IConfiguration configuration;
-        private readonly IMeterReadingsRepository repository;
 
-        public MeterReadingsController(IMeterReadingUploadService uploadService, IConfiguration configuration, IMeterReadingsRepository repository)
+        public MeterReadingsController(IMeterReadingUploadService uploadService)
         {
             this.uploadService = uploadService;
-            this.configuration = configuration;
-            this.repository = repository;
         }
 
         [Route("~/accounts/{id}/meter-readings")]
@@ -32,8 +26,8 @@
         [HttpPost]
         public async Task<ActionResult> MeterReadingUploads([FromForm] IFormFile? file)
         {
-            if (file.Length == 0)
-                return BadRequest("File is empty.");
+            if (file == null || file.Length == 0)
+                return BadRequest("File is null or empty.");
 
             var result = await uploadService.UploadAsync(file);
 

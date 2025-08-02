@@ -1,10 +1,9 @@
+﻿using MeterReadingsApi.Models;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Diagnostics.CodeAnalysis;
-using MeterReadingsApi.Models;
 using Xunit;
 
 namespace MeterReadingsApi.IntegrationTests;
