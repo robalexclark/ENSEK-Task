@@ -2,6 +2,7 @@
 using MeterReadingsApi.Services;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using System.IO;
 using Xunit;
 
 namespace MeterReadingsApi.UnitTests

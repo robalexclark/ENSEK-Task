@@ -16,13 +16,14 @@ namespace MeterReadingsApi.Validators
             RuleFor(x => x.File)
                 .Cascade(CascadeMode.Stop)
                 .NotNull().WithMessage("File is required")
-                .Must(f => f.Length > 0).WithMessage("File is empty")
-                .Must(HaveValidHeaders).WithMessage("Invalid or missing headers. Expected: AccountId,MeterReadingDateTime,MeterReadValue");
+                .Must(f => f!.Length > 0).WithMessage("File is empty")
+                .Must(HaveValidHeaders).WithMessage("Invalid or missing headers. Expected: AccountId,MeterReadingDateTime,MeterReadValue")
+                .Must(HasNoBlankLines).WithMessage("File contains blank rows");
         }
 
-        private static bool HaveValidHeaders(IFormFile file)
+        private static bool HaveValidHeaders(IFormFile? file)
         {
-            using StreamReader reader = new StreamReader(file.OpenReadStream());
+            using StreamReader reader = new StreamReader(file!.OpenReadStream());
             string? headerLine = reader.ReadLine();
             if (string.IsNullOrWhiteSpace(headerLine))
             {
@@ -37,6 +38,24 @@ namespace MeterReadingsApi.Validators
 
             return headers.Select(h => h.Trim())
                           .SequenceEqual(ExpectedHeaders, StringComparer.OrdinalIgnoreCase);
+        }
+
+        private static bool HasNoBlankLines(IFormFile? file)
+        {
+            using StreamReader reader = new StreamReader(file!.OpenReadStream());
+            // Skip header
+            reader.ReadLine();
+
+            string? line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
