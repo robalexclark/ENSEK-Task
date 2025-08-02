@@ -4,6 +4,7 @@ using MeterReadingsApi.Repositories;
 using MeterReadingsApi.Services;
 using MeterReadingsApi.Validators;
 using MeterReadingsApi.CsvMappers;
+using MeterReadingsApi.Models;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,7 @@ namespace MeterReadingsApi
             builder.Services.AddScoped<IMeterReadingUploadService, MeterReadingUploadService>();
             builder.Services.AddTransient<IValidator<MeterReadingCsvRecord>, MeterReadingCsvRecordValidator>();
             builder.Services.AddTransient<IValidator<int>, AccountIdValidator>();
+            builder.Services.AddTransient<IValidator<MeterReadingUploadRequest>, MeterReadingUploadRequestValidator>();
 
             WebApplication app = builder.Build();
 

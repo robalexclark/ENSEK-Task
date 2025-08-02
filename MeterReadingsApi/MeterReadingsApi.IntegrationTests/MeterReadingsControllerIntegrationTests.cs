@@ -77,6 +77,35 @@ public class MeterReadingsControllerIntegrationTests : IClassFixture<TestApiFact
     }
 
     [Fact]
+    public async Task Upload_MissingFile_ReturnsBadRequest()
+    {
+        // Arrange
+        MultipartFormDataContent content = new MultipartFormDataContent();
+
+        // Act
+        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Upload_InvalidHeaders_ReturnsBadRequest()
+    {
+        // Arrange - missing MeterReadValue header
+        string csv = "AccountId,MeterReadingDateTime\n" +
+                     "2344,16/05/2019 09:24\n";
+
+        using HttpContent content = CreateCsvContent(csv);
+
+        // Act
+        HttpResponseMessage response = await client.PostAsync("/api/meter-readings/meter-reading-uploads", content);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
     public async Task Upload_FileWithUnknownAccount_IgnoresReading()
     {
         // Arrange
