@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MeterReadingsApi.DataModel;
-using MeterReadingsApi.Models;
+using MeterReadingsApi.Shared;
 using MeterReadingsApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

@@ -5,6 +5,7 @@ using MeterReadingsApi.Controllers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Models;
+using MeterReadingsApi.Shared;
 using MeterReadingsApi.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

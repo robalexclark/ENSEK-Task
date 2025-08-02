@@ -4,6 +4,7 @@ using FluentValidation.Results;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Models;
+using MeterReadingsApi.Shared;
 using MeterReadingsApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,4 @@
-﻿using MeterReadingsBlazorClient.Models;
+using MeterReadingsApi.Shared;
 using System.Net.Http.Json;
 
 namespace MeterReadingsBlazorClient.Pages

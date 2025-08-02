@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MeterReadingsApi.DataModel;
-using MeterReadingsApi.Models;
+using MeterReadingsApi.Shared;
 
 namespace MeterReadingsApi.Mappers
 {
