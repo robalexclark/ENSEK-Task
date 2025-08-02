@@ -1,8 +1,6 @@
-using Blazorise;
+﻿using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
-using Bunit;
-using Microsoft.Extensions.DependencyInjection;
 
 public abstract class BlazoriseTestBase : TestContext
 {

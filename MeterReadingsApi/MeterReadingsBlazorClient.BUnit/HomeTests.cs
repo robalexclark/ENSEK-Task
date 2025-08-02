@@ -1,15 +1,11 @@
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Json;
-using Bunit;
-using MeterReadingsApi.Shared;
+﻿using MeterReadingsApi.Shared;
 using MeterReadingsBlazorClient.Pages;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit;
+using System.Net;
+using System.Net.Http.Json;
 
-public class HomeTests : BlazoriseTestBase
+public partial class HomeTests : BlazoriseTestBase
 {
-
     [Fact]
     public void Home_LoadsAccountsOnInit()
     {
@@ -76,18 +72,5 @@ public class HomeTests : BlazoriseTestBase
         Assert.NotNull(readings);
         Assert.Single(readings!);
         Assert.Equal(12345, readings![0].MeterReadValue);
-    }
-
-    private class TestHttpMessageHandler : HttpMessageHandler
-    {
-        private readonly Func<HttpRequestMessage, HttpResponseMessage> _handler;
-
-        public TestHttpMessageHandler(Func<HttpRequestMessage, HttpResponseMessage> handler)
-        {
-            _handler = handler;
-        }
-
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-            => Task.FromResult(_handler(request));
     }
 }
