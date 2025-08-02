@@ -27,9 +27,10 @@ namespace MeterReadingsApi.UnitTests
             // Assert
             Assert.Equal(2, list.Count);
             Assert.Equal(1234, list[0].AccountId);
-            Assert.Equal(new System.DateTime(2019, 5, 16, 9, 24, 0), list[0].MeterReadingDateTime);
+            Assert.Equal("16/05/2019 09:24", list[0].MeterReadingDateTime);
             Assert.Equal("00123", list[0].MeterReadValue);
             Assert.Equal(5678, list[1].AccountId);
+            Assert.Equal("17/05/2019 12:00", list[1].MeterReadingDateTime);
             Assert.Equal("00456", list[1].MeterReadValue);
         }
     }

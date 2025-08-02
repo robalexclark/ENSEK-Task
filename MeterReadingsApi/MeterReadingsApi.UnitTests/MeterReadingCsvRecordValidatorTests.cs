@@ -34,7 +34,7 @@ namespace MeterReadingsApi.UnitTests
             MeterReadingCsvRecord record = new MeterReadingCsvRecord
             {
                 AccountId = 1,
-                MeterReadingDateTime = DateTime.UtcNow,
+                MeterReadingDateTime = "01/01/2020 00:00",
                 MeterReadValue = "01234"
             };
 
@@ -54,7 +54,7 @@ namespace MeterReadingsApi.UnitTests
             MeterReadingCsvRecord record = new MeterReadingCsvRecord
             {
                 AccountId = 1,
-                MeterReadingDateTime = DateTime.UtcNow,
+                MeterReadingDateTime = "01/01/2020 00:00",
                 MeterReadValue = "1234" // only 4 digits
             };
 
@@ -74,7 +74,7 @@ namespace MeterReadingsApi.UnitTests
             MeterReadingCsvRecord record = new MeterReadingCsvRecord
             {
                 AccountId = 1,
-                MeterReadingDateTime = DateTime.UtcNow,
+                MeterReadingDateTime = "01/01/2020 00:00",
                 MeterReadValue = "12345"
             };
 
@@ -94,7 +94,7 @@ namespace MeterReadingsApi.UnitTests
             MeterReadingCsvRecord record = new MeterReadingCsvRecord
             {
                 AccountId = 1,
-                MeterReadingDateTime = DateTime.UtcNow,
+                MeterReadingDateTime = "01/01/2020 00:00",
                 MeterReadValue = "12345"
             };
 
@@ -114,7 +114,87 @@ namespace MeterReadingsApi.UnitTests
             MeterReadingCsvRecord record = new MeterReadingCsvRecord
             {
                 AccountId = 1,
-                MeterReadingDateTime = DateTime.UtcNow,
+                MeterReadingDateTime = "01/01/2020 00:00",
+                MeterReadValue = "12345"
+            };
+
+            // Act
+            ValidationResult result = validator.Validate(record);
+
+            // Assert
+            Assert.False(result.IsValid);
+        }
+
+        [Fact]
+        public void Negative_meter_read_value_fails_validation()
+        {
+            // Arrange
+            FakeRepository repo = new FakeRepository();
+            MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
+            MeterReadingCsvRecord record = new MeterReadingCsvRecord
+            {
+                AccountId = 1,
+                MeterReadingDateTime = "01/01/2020 00:00",
+                MeterReadValue = "-12345"
+            };
+
+            // Act
+            ValidationResult result = validator.Validate(record);
+
+            // Assert
+            Assert.False(result.IsValid);
+        }
+
+        [Fact]
+        public void Missing_meter_read_value_fails_validation()
+        {
+            // Arrange
+            FakeRepository repo = new FakeRepository();
+            MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
+            MeterReadingCsvRecord record = new MeterReadingCsvRecord
+            {
+                AccountId = 1,
+                MeterReadingDateTime = "01/01/2020 00:00",
+                MeterReadValue = string.Empty
+            };
+
+            // Act
+            ValidationResult result = validator.Validate(record);
+
+            // Assert
+            Assert.False(result.IsValid);
+        }
+
+        [Fact]
+        public void Non_integer_meter_read_value_fails_validation()
+        {
+            // Arrange
+            FakeRepository repo = new FakeRepository();
+            MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
+            MeterReadingCsvRecord record = new MeterReadingCsvRecord
+            {
+                AccountId = 1,
+                MeterReadingDateTime = "01/01/2020 00:00",
+                MeterReadValue = "12A45"
+            };
+
+            // Act
+            ValidationResult result = validator.Validate(record);
+
+            // Assert
+            Assert.False(result.IsValid);
+        }
+
+        [Fact]
+        public void Invalid_date_format_fails_validation()
+        {
+            // Arrange
+            FakeRepository repo = new FakeRepository();
+            MeterReadingCsvRecordValidator validator = new MeterReadingCsvRecordValidator(repo);
+            MeterReadingCsvRecord record = new MeterReadingCsvRecord
+            {
+                AccountId = 1,
+                MeterReadingDateTime = "20/99/2019 09:24",
                 MeterReadValue = "12345"
             };
 

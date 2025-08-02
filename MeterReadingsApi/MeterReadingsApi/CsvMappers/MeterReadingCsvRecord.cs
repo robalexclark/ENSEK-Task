@@ -3,7 +3,7 @@
     public class MeterReadingCsvRecord
     {
         public int AccountId { get; set; }
-        public DateTime MeterReadingDateTime { get; set; }
+        public string MeterReadingDateTime { get; set; } = string.Empty;
         public string MeterReadValue { get; set; } = string.Empty;
     }
 }

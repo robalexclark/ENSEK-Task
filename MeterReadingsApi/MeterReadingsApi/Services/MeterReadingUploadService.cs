@@ -4,6 +4,7 @@ using MeterReadingsApi.CsvMappers;
 using MeterReadingsApi.DataModel;
 using MeterReadingsApi.Interfaces;
 using MeterReadingsApi.Repositories;
+using System.Globalization;
 using System.IO;
 
 namespace MeterReadingsApi.Services
@@ -40,11 +41,12 @@ namespace MeterReadingsApi.Services
                 }
 
                 int value = int.Parse(record.MeterReadValue);
+                DateTime date = DateTime.ParseExact(record.MeterReadingDateTime, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
 
                 validReadings.Add(new MeterReading
                 {
                     AccountId = record.AccountId,
-                    MeterReadingDateTime = record.MeterReadingDateTime,
+                    MeterReadingDateTime = date,
                     MeterReadValue = value
                 });
 
